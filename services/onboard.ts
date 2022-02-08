@@ -6,7 +6,6 @@ const networkId = parseInt(
 );
 const networkName = process.env.NEXT_PUBLIC_NETWORK_NAME || "mumbai";
 const dappId = process.env.NEXT_PUBLIC_BNC_API_KEY;
-const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL;
 
 export default function initOnboard(subscriptions: any) {
   return Onboard({
@@ -17,15 +16,7 @@ export default function initOnboard(subscriptions: any) {
     darkMode: false,
     subscriptions,
     walletSelect: {
-      wallets: [
-        { walletName: "metamask" },
-        {
-          walletName: "walletConnect",
-          rpc: {
-            ["80001"]: RPC_URL,
-          },
-        },
-      ],
+      wallets: [{ walletName: "metamask" }],
     },
     walletCheck: [
       { checkName: "connect" },
