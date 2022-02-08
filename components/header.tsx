@@ -1,7 +1,5 @@
-import { ExternalLinkIcon } from "@heroicons/react/outline";
-import { Button } from "../components";
+import { Button, ExplorerLink } from "../components";
 import { useWalletStore } from "../stores";
-import { BLOCK_EXPLORER_URL } from "../helpers";
 import useTranslation from "next-translate/useTranslation";
 
 export default function Header() {
@@ -28,29 +26,23 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full">
-      <div className="flex items-center justify-end">
-        {address ? (
-          <>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href={BLOCK_EXPLORER_URL(address)}
-            >
-              <div className="flex mx-2 hover:text-indigo-800">
-                <span>
-                  {address.slice(0, 4)}...{address.slice(-4)}
-                </span>
-                <ExternalLinkIcon className="h-6 w-6" />
-              </div>
-            </a>
-            <Button onClick={handleReset}>
-              {t("wallet.disconnect_button")}
+    <header className="w-full py-2 px-2">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">The Factory 🏭</h1>
+        <div className="flex items-center">
+          {address ? (
+            <>
+              <ExplorerLink address={address} />
+              <Button onClick={handleReset}>
+                {t("wallet.disconnect_button")}
+              </Button>
+            </>
+          ) : (
+            <Button onClick={connect}>
+              {t("wallet.connect_button")}
             </Button>
-          </>
-        ) : (
-          <Button onClick={connect}>{t("wallet.connect_button")}</Button>
-        )}
+          )}
+        </div>
       </div>
     </header>
   );
