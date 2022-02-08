@@ -1,8 +1,8 @@
-import NFTAbi from "./abis/nft.json";
+import { abi, bytecode } from "./abis/theFactory.json";
 
 export const contracts: Contracts = {
-  nft: {
-    address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS ?? "0x",
-    abi: NFTAbi.abi,
+  factory: {
+    abi,
+    bytecode,
   },
 };
