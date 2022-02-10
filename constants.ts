@@ -1,8 +1,8 @@
-import { abi, bytecode } from "./abis/theFactory.json";
+import Factory from "./abis/theFactory.json";
 
 export const contracts: Contracts = {
   factory: {
-    abi,
-    bytecode,
+    abi: Factory.abi,
+    bytecode: Factory.bytecode,
   },
 };
