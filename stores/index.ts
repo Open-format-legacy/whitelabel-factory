@@ -1,3 +1,4 @@
+import useFileDataStore from "./fileData";
 import useWalletStore from "./wallet";
 
-export { useWalletStore };
+export { useFileDataStore, useWalletStore };
