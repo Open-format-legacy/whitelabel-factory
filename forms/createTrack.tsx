@@ -3,7 +3,7 @@ import useTranslation from "next-translate/useTranslation";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect } from "react";
+
 import { Button } from "../components";
 
 interface CreateReleaseProps {
@@ -29,6 +29,7 @@ export default function LoginForm({
   const ReleaseSchema = yup.object().shape({
     artist: yup.string().required(),
     name: yup.string().required(),
+    description: yup.string().required(),
     symbol: yup.string().required(),
     salePrice: yup.number().required(),
     quantity: yup.number().required(),
@@ -43,13 +44,26 @@ export default function LoginForm({
           return total + (row.share || 0);
         }, 0);
 
-        console.log({ total });
-
         return total === 100;
       }),
   });
   const form = useForm<TrackData>({
     resolver: yupResolver(ReleaseSchema),
+    defaultValues: {
+      artist: "Artist Name",
+      description: "This is my lifes work, please buy it",
+      name: "Track Name",
+      symbol: "TOON",
+      salePrice: 1,
+      quantity: 500,
+      royalitiesPercentage: 250,
+      stakeholders: [
+        {
+          address: "0x03755352654D73DA06756077Dd7f040ADcE3Fd58",
+          share: 100,
+        },
+      ],
+    },
   });
 
   const { remove, fields, append } = useFieldArray({
@@ -69,7 +83,7 @@ export default function LoginForm({
         <label htmlFor="name">Artist</label>
         <input
           style={{ border: "1px solid black" }}
-          placeholder="Track name"
+          placeholder="Artist Name"
           {...register("artist")}
         />
         {errors.artist && (
@@ -87,6 +101,17 @@ export default function LoginForm({
         {errors.name && (
           <p className="text-sm py-2 text-red-500">
             {errors.name.message}
+          </p>
+        )}
+        <label htmlFor="description">Track Description</label>
+        <input
+          style={{ border: "1px solid black" }}
+          placeholder="Track description"
+          {...register("description")}
+        />
+        {errors.description && (
+          <p className="text-sm py-2 text-red-500">
+            {errors.description.message}
           </p>
         )}
         <label htmlFor="symbol">Symbol</label>
