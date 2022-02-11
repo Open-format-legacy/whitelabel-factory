@@ -12,6 +12,7 @@
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.8",
     "bnc-onboard": "^1.36.0",
+    "classnames": "^2.3.1",
     "ethers": "^5.5.2",
     "formidable": "^2.0.1",
     "next": "12.0.7",
@@ -24,14 +25,15 @@
     "zustand": "^3.6.7"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.4.0",
     "@types/formidable": "^2.0.4",
     "@types/node": "16.11.12",
     "@types/react": "17.0.37",
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "^10.4.2",
     "eslint": "8.4.1",
     "eslint-config-next": "12.0.7",
-    "postcss": "^8.4.4",
-    "tailwindcss": "^3.0.0",
+    "postcss": "^8.4.6",
+    "tailwindcss": "3.0.0",
     "typescript": "4.5.3"
   }
 }
