@@ -1,20 +1,38 @@
-import { useForm, useFieldArray } from "react-hook-form";
+import {
+  FormProvider,
+  useForm,
+  useFieldArray,
+} from "react-hook-form";
+import { MinusCircleIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
 import useTranslation from "next-translate/useTranslation";
-
+import { useWalletStore } from "../stores";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { Button } from "../components";
+import {
+  Button,
+  Field,
+  Input,
+  TextArea,
+  Toggle,
+} from "../components";
 
 interface CreateReleaseProps {
   isLoading: boolean;
   onCreateTrack: (data: TrackData) => void;
+  requiredFilesAdded: boolean;
 }
 export default function LoginForm({
   isLoading,
   onCreateTrack,
+  requiredFilesAdded = false,
 }: CreateReleaseProps) {
   const { t } = useTranslation("auth");
+  const { address } = useWalletStore();
+  const [showRoyalties, setShowRoyalties] = useState<boolean>(false);
+  const [showStakeholders, setShowStakeholders] =
+    useState<boolean>(false);
 
   const emailRequired = t("email.required");
   const emailValid = t("email.valid");
@@ -28,41 +46,39 @@ export default function LoginForm({
 
   const ReleaseSchema = yup.object().shape({
     artist: yup.string().required(),
-    name: yup.string().required(),
-    description: yup.string().required(),
+    track_name: yup.string().required(),
+    track_description: yup.string().required(),
     symbol: yup.string().required(),
     salePrice: yup.number().required(),
     quantity: yup.number().required(),
-    royalitiesPercentage: yup.number().required().min(1).max(10000),
-    stakeholders: yup
-      .array()
-      .of(yup.object().shape(StakeholderSchema))
-      .required("Must have fields")
-      .min(1, "Minimum of 1 field")
-      .test("sum", "You must allocate 100%", (rows = []) => {
-        const total = rows.reduce((total, row) => {
-          return total + (row.share || 0);
-        }, 0);
+    royalitiesPercentage: showRoyalties
+      ? yup.number().required().min(1).max(10000)
+      : yup.number().nullable(),
+    stakeholders: showStakeholders
+      ? yup
+          .array()
+          .of(yup.object().shape(StakeholderSchema))
+          .required("Must have fields")
+          .min(1, "Minimum of 1 stakeholder")
+          .test("sum", "You must allocate 100%", (rows = []) => {
+            const total = rows.reduce((total, row) => {
+              return total + (row.share || 0);
+            }, 0);
 
-        return total === 100;
-      }),
+            return total === 100;
+          })
+      : yup.array().nullable(),
   });
+
   const form = useForm<TrackData>({
     resolver: yupResolver(ReleaseSchema),
     defaultValues: {
-      artist: "Artist Name",
-      description: "This is my lifes work, please buy it",
-      name: "Track Name",
+      artist: "ART",
+      track_description: "My latest track",
+      track_name: "Big",
       symbol: "TOON",
       salePrice: 1,
       quantity: 500,
-      royalitiesPercentage: 250,
-      stakeholders: [
-        {
-          address: "0x03755352654D73DA06756077Dd7f040ADcE3Fd58",
-          share: 100,
-        },
-      ],
     },
   });
 
@@ -72,155 +88,202 @@ export default function LoginForm({
   });
 
   const {
+    reset,
     register,
     formState: { errors },
+    watch,
   } = form;
 
+  useEffect(() => {
+    if (address) {
+      reset({
+        stakeholders: [{ address, share: 100 }],
+        royalitiesPercentage: 0,
+      });
+    }
+  }, [address]);
+
+  const symbolValue = watch("symbol");
+
   return (
-    <form onSubmit={form.handleSubmit(onCreateTrack)}>
-      <div className="flex flex-col my-5">
-        <h1 className="text-2xl font-semibold">Artist information</h1>
-        <label htmlFor="name">Artist</label>
-        <input
-          style={{ border: "1px solid black" }}
-          placeholder="Artist Name"
-          {...register("artist")}
-        />
-        {errors.artist && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.artist.message}
-          </p>
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onCreateTrack)}>
+        <div className="flex flex-col bg-indigo-300 p-5 rounded-md">
+          <div className="grid grid-cols-6 gap-6">
+            <Field
+              className="col-span-6 lg:col-span-2"
+              helpText="Add the name of the artist or band."
+              error={errors.artist?.message}
+            >
+              <Input
+                name="artist"
+                label="Artist Name"
+                helpText="Add the name of the artist or band."
+                error={errors.artist?.message}
+              />
+            </Field>
+            <Field
+              className="col-span-6 lg:col-span-2"
+              helpText="Add the name of the track."
+              error={errors.track_name?.message}
+            >
+              <Input
+                name="track_name"
+                label="Track Name"
+                helpText="Add the name of the track."
+                error={errors.track_name?.message}
+              />
+            </Field>
+            <Field
+              className="col-span-6 lg:col-span-2"
+              helpText="e.g. TOON, MIX, SONG"
+              error={errors.symbol?.message}
+            >
+              <Input
+                name="symbol"
+                label="Blockchain Track Indentifier"
+                helpText="e.g. TOON, MIX, SONG"
+                error={errors.symbol?.message}
+                maxLength={4}
+              />
+            </Field>
+            <Field
+              className="col-span-6"
+              helpText="Add a description about the track. Max 255 characters."
+              error={errors.track_description?.message}
+            >
+              <TextArea
+                name="track_description"
+                label="Track Description"
+                error={errors.track_description?.message}
+              />
+            </Field>
+          </div>
+        </div>
+        <div className="grid grid-cols-6 gap-6 my-5 bg-indigo-300 p-5 rounded-md">
+          <Field
+            className="col-span-6 lg:col-span-3"
+            helpText="How many releases are available. Leave blank for unlimited."
+            error={errors.quantity?.message}
+          >
+            <Input
+              type="number"
+              name="quantity"
+              label="Quantity"
+              error={errors.quantity?.message}
+              trailing={symbolValue}
+            />
+          </Field>
+          <Field
+            className="col-span-6 lg:col-span-3"
+            helpText="How much does each release cost."
+            error={errors.salePrice?.message}
+          >
+            <Input
+              name="salePrice"
+              label="Sale Price"
+              error={errors.salePrice?.message}
+              trailing="MATIC"
+            />
+          </Field>
+          <Field className="col-span-6 lg:col-span-3">
+            <Toggle
+              enabled={showRoyalties}
+              setEnabled={setShowRoyalties}
+              label="Add royalties"
+            />
+          </Field>
+          <Field className="col-span-6 lg:col-span-3">
+            <Toggle
+              enabled={showStakeholders}
+              setEnabled={setShowStakeholders}
+              label="Add stakeholders"
+            />
+          </Field>
+        </div>
+        {showRoyalties && (
+          <div className="grid grid-cols-6 gap-6 my-5 bg-indigo-300 p-5 rounded-md">
+            <Field
+              className="col-span-6 lg:col-span-3"
+              helpText="The percentage of royalties you get whenever a release is sold on the secondary market. This can be to two decimals places. e.g 25.39"
+              error={errors.royalitiesPercentage?.message}
+            >
+              <Input
+                name="royalitiesPercentage"
+                label="Royalty Percentage"
+                trailing="%"
+                error={errors.royalitiesPercentage?.message}
+              />
+            </Field>
+          </div>
         )}
-        <h1 className="text-2xl font-semibold">Track information</h1>
-        <label htmlFor="name">Name</label>
-        <input
-          style={{ border: "1px solid black" }}
-          placeholder="Track name"
-          {...register("name")}
-        />
-        {errors.name && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.name.message}
-          </p>
+        {showStakeholders && (
+          <div className="grid grid-cols-6 gap-6 my-5 bg-indigo-300 p-5 rounded-md">
+            {fields.map((item, index) => {
+              return (
+                <>
+                  <Field
+                    className="col-span-6 lg:col-span-3"
+                    helpText="Add the ethereum address of the stakeholder."
+                  >
+                    <Input
+                      label="Address"
+                      name={`stakeholders.${index}.address`}
+                      error={errors.stakeholders?.message}
+                    />
+                  </Field>
+                  <Field
+                    className="col-span-6 lg:col-span-3"
+                    helpText="Add the percentage of the shares."
+                  >
+                    <Input
+                      label="Shares"
+                      name={`stakeholders.${index}.share`}
+                      error={errors.stakeholders?.message}
+                    />
+                    <div
+                      className="mx-5"
+                      onClick={() => remove(index)}
+                    >
+                      <MinusCircleIcon className="h-6 w-6" />
+                    </div>
+                  </Field>
+                </>
+              );
+            })}
+            <Field className="col-span-6">
+              {errors?.stakeholders && (
+                <p className="text-sm text-red-500">
+                  {errors.stakeholders.message}
+                </p>
+              )}
+            </Field>
+            <Field className="col-span-6">
+              <Button
+                onClick={() => {
+                  append({
+                    address: "",
+                    share: undefined,
+                  });
+                }}
+              >
+                Add stakeholder
+              </Button>
+            </Field>
+          </div>
         )}
-        <label htmlFor="description">Track Description</label>
-        <input
-          style={{ border: "1px solid black" }}
-          placeholder="Track description"
-          {...register("description")}
-        />
-        {errors.description && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.description.message}
+        <Field className="my-5">
+          <Button
+            isLoading={isLoading}
+            disabled={!requiredFilesAdded}
+          >
+            Create Track
+          </Button>
+          <p className="mt-2 text-sm text-gray-500">
+            You're missing an audio file and track artwork.
           </p>
-        )}
-        <label htmlFor="symbol">Symbol</label>
-        <input
-          placeholder="Symbol e.g TOON"
-          style={{ border: "1px solid black" }}
-          {...register("symbol")}
-        />
-        {errors.symbol && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.symbol.message}
-          </p>
-        )}
-        <label htmlFor="salePrice">Sale Price</label>
-        <input
-          type="number"
-          style={{ border: "1px solid black" }}
-          {...register("salePrice")}
-        />
-        {errors.salePrice && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.salePrice.message}
-          </p>
-        )}
-        <label htmlFor="name">Quantity</label>
-        <input
-          type="number"
-          style={{ border: "1px solid black" }}
-          {...register("quantity")}
-        />
-        {errors.quantity && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.quantity.message}
-          </p>
-        )}
-        <label htmlFor="royalitiesPercentage">
-          Royalty Percentage
-        </label>
-        <input
-          type="number"
-          style={{ border: "1px solid black" }}
-          {...register("royalitiesPercentage")}
-        />
-        {errors.royalitiesPercentage && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.royalitiesPercentage.message}
-          </p>
-        )}
-      </div>
-
-      <div className="my-5">
-        <h1 className="text-2xl font-semibold">Shareholders</h1>
-        <ul>
-          {fields.map((item, index) => {
-            return (
-              <li className="my-5" key={item.id}>
-                <label htmlFor={`stakeholders.${index}.address`}>
-                  Address
-                </label>
-                <input
-                  style={{ border: "1px solid black" }}
-                  placeholder="0x...."
-                  {...register(`stakeholders.${index}.address`)}
-                />
-                {errors?.stakeholders?.[index]?.address && (
-                  <p className="text-sm py-2 text-red-500">
-                    {errors.stakeholders[index].address.message}
-                  </p>
-                )}
-
-                <label htmlFor={`stakeholders.${index}.address`}>
-                  Share
-                </label>
-                <input
-                  style={{ border: "1px solid black" }}
-                  placeholder="10"
-                  {...register(`stakeholders.${index}.share`)}
-                />
-                {errors?.stakeholders?.[index]?.share && (
-                  <p className="text-sm py-2 text-red-500">
-                    {errors.stakeholders[index].share.message}
-                  </p>
-                )}
-
-                <button type="button" onClick={() => remove(index)}>
-                  Delete Shareholder
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-        <button
-          type="button"
-          onClick={() => {
-            append({
-              address: "",
-              share: undefined,
-            });
-          }}
-        >
-          Add Shareholder
-        </button>
-        {errors?.stakeholders && (
-          <p className="text-sm py-2 text-red-500">
-            {errors.stakeholders.message}
-          </p>
-        )}
-      </div>
-      <Button isLoading={isLoading}>Create Track</Button>
-    </form>
+        </Field>
+      </form>
+    </FormProvider>
   );
 }

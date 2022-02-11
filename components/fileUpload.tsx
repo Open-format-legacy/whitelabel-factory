@@ -1,7 +1,7 @@
 import { CloudUploadIcon } from "@heroicons/react/outline";
 
 interface FileUploadProps {
-  onFileUpload: () => void;
+  onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   text: string;
   name: string;
@@ -25,8 +25,8 @@ export default function FileUpload({
         className="flex hover:text-blue-400 font-semibold"
         htmlFor={name}
       >
+        <span className="whitespace-nowrap">{text}</span>
         <CloudUploadIcon className="w-6 h-6 mx-2" />
-        <span>{text}</span>
       </label>
       <input
         id={name}
