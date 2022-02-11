@@ -17,8 +17,8 @@ type Stakeholder = {
 };
 type TrackData = {
   artist: string;
-  name: string;
-  description: string;
+  track_name: string;
+  track_description: string;
   symbol: string;
   stakeholders: Stakeholder[];
   royalitiesPercentage: number;

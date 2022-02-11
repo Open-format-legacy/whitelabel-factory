@@ -26,16 +26,13 @@ const Home: NextPage = () => {
   const [transaction, setTransaction] = useState();
   const [isLoading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log({ image, audio });
-  }, [image, audio]);
-
   async function handleCreateContract(data: TrackData) {
+    console.log({ data });
     setLoading(true);
 
     const {
-      name,
-      description,
+      track_name,
+      track_description,
       symbol,
       salePrice,
       stakeholders,
@@ -50,18 +47,20 @@ const Home: NextPage = () => {
     );
 
     const metadata = buildMetadata(
-      name,
-      description,
+      track_name,
+      track_description,
       image,
       audio,
-      [],
+      null,
       licence,
       documents
     );
 
+    console.log(metadata);
+
     const ipfsData = await uploadToIPFS(metadata);
 
-    console.log("IPFS", ipfsData.url);
+    console.log({ ipfsData });
 
     createContract({
       name: "factory",
@@ -88,6 +87,7 @@ const Home: NextPage = () => {
           setTransaction(receipt.transactionHash);
 
           console.log(await contract.name());
+
           setLoading(false);
         } catch (e) {
           setLoading(false);
@@ -97,46 +97,77 @@ const Home: NextPage = () => {
     });
   }
 
-  async function handleFileUpload(e, setter) {
+  function handleFileUpload(e, setter) {
     const files = e.target.files;
-    setter(files[0]);
+    if (files[0]) {
+      setter(files[0]);
+    }
   }
+
+  const files = [
+    {
+      name: "audio",
+      setter: setAudio,
+      label: audio ? audio.name : "Select .mp3",
+      text: "Upload audio",
+      accept: ".mp3",
+    },
+    {
+      name: "image",
+      setter: setImage,
+      label: image ? image.name : "Select .png, .jpeg, .jpg",
+      text: "Upload artwork",
+      accept: ".png, .jpeg, .jpg",
+    },
+    {
+      name: "licence",
+      setter: setLicence,
+      label: licence ? licence.name : "Select .pdf",
+      text: "Upload licence",
+      accept: ".pdf",
+    },
+  ];
+
+  const requiredFilesAdded = Boolean(audio?.name && image?.name);
 
   return (
     <div>
       {wallet?.provider && (
-        <div className="grid grid-cols-2 gap-5">
-          <div className="flex flex-col">
-            {!transaction ? (
-              <>
-                <FileUpload
-                  name="audio"
-                  onFileUpload={(e) => handleFileUpload(e, setAudio)}
-                  label="Select .mp3"
-                  text="Upload Track"
-                  accept=".mp3"
-                />
-                <CreateTrackForm
-                  onCreateTrack={(data) => handleCreateContract(data)}
-                  isLoading={isLoading}
-                />
-              </>
-            ) : (
-              <div className="my-2">
-                <Button>
-                  <span>View Deployed Contract</span>
-                  <ExternalLinkIcon className="h-6 w-6" />
-                </Button>
-              </div>
-            )}
+        <div className="grid grid-cols-5 gap-5">
+          <div className="flex flex-col col-span-3">
+            <CreateTrackForm
+              onCreateTrack={(data) => handleCreateContract(data)}
+              isLoading={isLoading}
+              requiredFilesAdded={requiredFilesAdded}
+            />
           </div>
-          <div className="grid grid-rows-2 gap-5">
-            {!transaction && (
-              <div className="row-span-3">
-                <div className="border-0 h-full bg-indigo-500 flex flex-col justify-center items-center">
+          <div className="flex flex-col space-y-5 col-span-2">
+            <div className="bg-indigo-300 rounded-md">
+              <ul className="p-5">
+                <h2>Assets</h2>
+                {files.map(
+                  ({ name, setter, label, text, accept }, i) => (
+                    <li className="my-2">
+                      <FileUpload
+                        name={name}
+                        onFileUpload={(e) =>
+                          handleFileUpload(e, setter)
+                        }
+                        label={label}
+                        text={text}
+                        accept={accept}
+                      />
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+            {image && (
+              <div>
+                <div className="rounded-md bg-indigo-500 flex flex-col justify-center items-center">
                   {image ? (
                     <img
-                      className="w-full h-full"
+                      className="w-full rounded-md"
                       src={URL.createObjectURL(image)}
                     />
                   ) : (
@@ -153,6 +184,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
             )}
+
             <div>
               {audio && (
                 <audio className="w-full" id="audio" controls>

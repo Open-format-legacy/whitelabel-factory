@@ -27,20 +27,20 @@ export function buildMetadata(
     audio: new File([audio], audio.name, {
       type: audio.type,
     }),
-    attributes,
-    licence: licence
-      ? new File([licence], licence.name, {
-          type: licence.type,
-        })
-      : null,
-    documents: documents
-      ? documents.map(
-          (document, i) =>
-            new File([document], `${document.name}`, {
-              type: document.type,
-            })
-        )
-      : [],
+    ...(attributes && { attributes }),
+    ...(licence && {
+      licence: new File([licence], licence.name, {
+        type: licence.type,
+      }),
+    }),
+    ...(documents && {
+      documents: documents.map(
+        (document, i) =>
+          new File([document], `${document.name}`, {
+            type: document.type,
+          })
+      ),
+    }),
   };
 
   return data;
