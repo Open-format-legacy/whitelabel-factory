@@ -5271,6 +5271,11 @@ graphql-request@^4.0.0:
     extract-files "^9.0.0"
     form-data "^3.0.0"
 
+graphql@^16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.3.0.tgz#a91e24d10babf9e60c706919bb182b53ccdffc05"
+  integrity sha512-xm+ANmA16BzCT5pLjuXySbQVFwH3oJctUVdy81w1sV0vBU0KgDdBGtxQOUd5zqOBk/JayAFeG8Dlmeq74rjm/A==
+
 gridplus-sdk@^0.7.16:
   version "0.7.27"
   resolved "https://registry.yarnpkg.com/gridplus-sdk/-/gridplus-sdk-0.7.27.tgz#e63438fc0a676f88d5228e74a28426361e6149d5"
