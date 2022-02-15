@@ -32,6 +32,7 @@ export default function useRelease(address: string) {
 							id
 							amount
 							createdAtTimestamp
+							transactionHash
 						}
 						creator {
 							id
