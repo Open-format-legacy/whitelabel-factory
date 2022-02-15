@@ -1,0 +1,7 @@
+{
+  "useTabs": true,
+  "trailingComma": "none",
+  "semi": true,
+  "printWidth": 100,
+  "tailwindConfig": "./tailwind.config.js"
+}
