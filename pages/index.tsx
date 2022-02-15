@@ -10,6 +10,7 @@ import {
 import { useFileDataStore, useWalletStore } from "../stores";
 import { CreateTrackForm } from "../forms";
 import { ethers } from "ethers";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { wallet } = useWalletStore();
@@ -25,6 +26,7 @@ const Home: NextPage = () => {
   } = useFileDataStore();
   const [transaction, setTransaction] = useState();
   const [isLoading, setLoading] = useState<boolean>(false);
+  const { push } = useRouter();
 
   async function handleCreateContract(data: TrackData) {
     console.log({ data });
@@ -85,6 +87,13 @@ const Home: NextPage = () => {
           const receipt = await contract.deployTransaction.wait();
 
           setTransaction(receipt.transactionHash);
+          push({
+            pathname: "/dashboard",
+            query: {
+              address: contract.address,
+              metadata: ipfsData.url,
+            },
+          });
 
           console.log(await contract.name());
 
