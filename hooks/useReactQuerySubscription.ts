@@ -12,10 +12,9 @@ export default function useReactQuerySubscription() {
       console.log("connected");
     };
     websocket.onmessage = (event) => {
-      console.log(JSON.parse(event.data));
-      const data = JSON.parse(event.data);
-      const queryKey = [...data.entity, data.id].filter(Boolean);
-      queryClient.invalidateQueries(queryKey);
+      //@TODO This is not firing. I will revisit.
+      console.log({ EVENT: event });
+      queryClient.invalidateQueries(["release"]);
     };
 
     return () => {
