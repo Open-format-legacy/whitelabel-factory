@@ -1,10 +1,19 @@
 import type { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from "react-query";
 import "../styles/globals.css";
 import { useEffect } from "react";
 import { Header } from "../components";
 import { addNetwork, NETWORK_ID, readyToTransact } from "../helpers";
 import { initOnboard } from "../services";
 import { useWalletStore } from "../stores";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   const {
@@ -51,10 +60,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [onboard]);
 
   return (
-    <div className="m-4">
-      <Header />
-      <Component {...pageProps} />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="m-4">
+        <Header />
+        <Component {...pageProps} />
+      </div>
+    </QueryClientProvider>
   );
 }
 
