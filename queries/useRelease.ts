@@ -5,11 +5,9 @@ import { request, gql } from "graphql-request";
 const endpoint =
   "https://api.thegraph.com/subgraphs/name/tinypell3ts/music-factory";
 
-export default function usePosts() {
+export default function useRelease() {
   return useQuery("release", async () => {
-    const {
-      release: { data },
-    } = await request(
+    const { release } = await request(
       endpoint,
       gql`
         query {
@@ -18,6 +16,24 @@ export default function usePosts() {
             name
             symbol
             totalSold
+            maxSupply
+            totalEarnings
+            totalReleased
+            royaltiesPercentage
+            salePrice
+            image
+            audio
+            description
+            licence
+            stakeholders {
+              id
+              share
+            }
+            payouts {
+              id
+              amount
+              createdAtTimestamp
+            }
             creator {
               id
             }
@@ -25,6 +41,6 @@ export default function usePosts() {
         }
       `
     );
-    return data;
+    return release;
   });
 }
