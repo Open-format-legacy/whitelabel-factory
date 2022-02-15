@@ -16,10 +16,10 @@ export default function ExplorerLink({
 	return (
 		<a target="_blank" rel="noreferrer" href={BLOCK_EXPLORER_URL(address, isTx)}>
 			{isTx ? (
-				<Button>
+				<div className="mx-2 flex hover:text-indigo-800">
 					<span>View Transaction</span>
 					<ExternalLinkIcon className="h-6 w-6" />
-				</Button>
+				</div>
 			) : (
 				<div className="mx-2 flex hover:text-indigo-800">
 					<span>{truncate ? `${address.slice(0, 4)}...${address.slice(-4)}` : address}</span>
