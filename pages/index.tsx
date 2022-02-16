@@ -1,12 +1,7 @@
 import type { NextPage } from "next";
-import { useState, useEffect } from "react";
-import { Button, FileUpload } from "../components";
-import { ExternalLinkIcon } from "@heroicons/react/outline";
-import {
-  createContract,
-  uploadToIPFS,
-  buildMetadata,
-} from "../helpers";
+import { useState } from "react";
+import { FileUpload } from "../components";
+import { createContract, uploadToIPFS, buildMetadata } from "../helpers";
 import { useFileDataStore, useWalletStore } from "../stores";
 import { CreateTrackForm } from "../forms";
 import { ethers } from "ethers";
@@ -14,22 +9,12 @@ import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { wallet } = useWalletStore();
-  const {
-    image,
-    audio,
-    licence,
-    documents,
-    setImage,
-    setAudio,
-    setLicence,
-    setDocuments,
-  } = useFileDataStore();
-  const [transaction, setTransaction] = useState();
+  const { image, audio, licence, documents, setImage, setAudio, setLicence, setDocuments } =
+    useFileDataStore();
   const [isLoading, setLoading] = useState<boolean>(false);
   const { push } = useRouter();
 
   async function handleCreateContract(data: TrackData) {
-    console.log({ data });
     setLoading(true);
 
     const {
@@ -39,14 +24,10 @@ const Home: NextPage = () => {
       salePrice,
       stakeholders,
       quantity,
-      royalitiesPercentage,
+      royalitiesPercentage
     } = data;
-    const payees = stakeholders.map(
-      (stakeholder) => stakeholder.address
-    );
-    const shares = stakeholders.map(
-      (stakeholder) => stakeholder.share
-    );
+    const payees = stakeholders.map((stakeholder) => stakeholder.address);
+    const shares = stakeholders.map((stakeholder) => stakeholder.share);
 
     const metadata = buildMetadata(
       track_name,
@@ -58,11 +39,7 @@ const Home: NextPage = () => {
       documents
     );
 
-    console.log(metadata);
-
     const ipfsData = await uploadToIPFS(metadata);
-
-    console.log({ ipfsData });
 
     createContract({
       name: "factory",
@@ -72,9 +49,7 @@ const Home: NextPage = () => {
           const contract = await factory.deploy(
             payees,
             shares,
-            salePrice
-              ? ethers.utils.parseEther(salePrice.toString())
-              : 0,
+            salePrice ? ethers.utils.parseEther(salePrice.toString()) : 0,
             name,
             symbol,
             quantity,
@@ -82,27 +57,20 @@ const Home: NextPage = () => {
             ipfsData.url
           );
 
-          console.log("ADDRESS", contract.address);
-
           const receipt = await contract.deployTransaction.wait();
 
-          setTransaction(receipt.transactionHash);
           push({
             pathname: "/dashboard",
             query: {
-              address: contract.address,
-              metadata: ipfsData.url,
-            },
+              address: contract.address
+            }
           });
-
-          console.log(await contract.name());
 
           setLoading(false);
         } catch (e) {
           setLoading(false);
-          console.log({ e });
         }
-      },
+      }
     });
   }
 
@@ -119,22 +87,22 @@ const Home: NextPage = () => {
       setter: setAudio,
       label: audio ? audio.name : "Select .mp3",
       text: "Upload audio",
-      accept: ".mp3",
+      accept: ".mp3"
     },
     {
       name: "image",
       setter: setImage,
       label: image ? image.name : "Select .png, .jpeg, .jpg",
       text: "Upload artwork",
-      accept: ".png, .jpeg, .jpg",
+      accept: ".png, .jpeg, .jpg"
     },
     {
       name: "licence",
       setter: setLicence,
       label: licence ? licence.name : "Select .pdf",
       text: "Upload licence",
-      accept: ".pdf",
-    },
+      accept: ".pdf"
+    }
   ];
 
   const requiredFilesAdded = Boolean(audio?.name && image?.name);
@@ -143,48 +111,39 @@ const Home: NextPage = () => {
     <div>
       {wallet?.provider && (
         <div className="grid grid-cols-5 gap-5">
-          <div className="flex flex-col col-span-3">
+          <div className="col-span-3 flex flex-col">
             <CreateTrackForm
               onCreateTrack={(data) => handleCreateContract(data)}
               isLoading={isLoading}
               requiredFilesAdded={requiredFilesAdded}
             />
           </div>
-          <div className="flex flex-col space-y-5 col-span-2">
-            <div className="bg-indigo-300 rounded-md">
+          <div className="col-span-2 flex flex-col space-y-5">
+            <div className="rounded-md bg-indigo-300">
               <ul className="p-5">
                 <h2>Assets</h2>
-                {files.map(
-                  ({ name, setter, label, text, accept }, i) => (
-                    <li className="my-2">
-                      <FileUpload
-                        name={name}
-                        onFileUpload={(e) =>
-                          handleFileUpload(e, setter)
-                        }
-                        label={label}
-                        text={text}
-                        accept={accept}
-                      />
-                    </li>
-                  )
-                )}
+                {files.map(({ name, setter, label, text, accept }, i) => (
+                  <li className="my-2">
+                    <FileUpload
+                      name={name}
+                      onFileUpload={(e) => handleFileUpload(e, setter)}
+                      label={label}
+                      text={text}
+                      accept={accept}
+                    />
+                  </li>
+                ))}
               </ul>
             </div>
             {image && (
               <div>
-                <div className="rounded-md bg-indigo-500 flex flex-col justify-center items-center">
+                <div className="flex flex-col items-center justify-center rounded-md bg-indigo-500">
                   {image ? (
-                    <img
-                      className="w-full rounded-md"
-                      src={URL.createObjectURL(image)}
-                    />
+                    <img className="w-full rounded-md" src={URL.createObjectURL(image)} />
                   ) : (
                     <FileUpload
                       name="image"
-                      onFileUpload={(e) =>
-                        handleFileUpload(e, setImage)
-                      }
+                      onFileUpload={(e) => handleFileUpload(e, setImage)}
                       label="Select .mp3"
                       text="Upload Track Artwork"
                       accept=".jpg, .png, .jpeg"
