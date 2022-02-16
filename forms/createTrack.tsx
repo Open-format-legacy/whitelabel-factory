@@ -95,7 +95,7 @@ export default function CreateReleaseForm({
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onCreateTrack)}>
-        <div className="flex flex-col rounded-md bg-indigo-300 p-5">
+        <div className="gradient-primary flex flex-col rounded-md p-5">
           <div className="grid grid-cols-6 gap-6">
             <Field
               className="col-span-6 lg:col-span-2"
@@ -147,7 +147,7 @@ export default function CreateReleaseForm({
             </Field>
           </div>
         </div>
-        <div className="my-5 grid grid-cols-6 gap-6 rounded-md bg-indigo-300 p-5">
+        <div className="gradient-primary my-5 grid grid-cols-6 gap-6 rounded-md p-5">
           <Field
             className="col-span-6 lg:col-span-3"
             helpText="How many releases are available. Leave blank for unlimited."
@@ -185,7 +185,7 @@ export default function CreateReleaseForm({
           </Field>
         </div>
         {showRoyalties && (
-          <div className="my-5 grid grid-cols-6 gap-6 rounded-md bg-indigo-300 p-5">
+          <div className="gradient-primary my-5 grid grid-cols-6 gap-6 rounded-md p-5">
             <Field
               className="col-span-6 lg:col-span-3"
               helpText="The percentage of royalties you get whenever a release is sold on the secondary market. This can be to two decimals places. e.g 25.39"
@@ -201,12 +201,12 @@ export default function CreateReleaseForm({
           </div>
         )}
         {showStakeholders && (
-          <div className="my-5 grid grid-cols-6 gap-6 rounded-md bg-indigo-300 p-5">
+          <div className="gradient-primary my-5 grid grid-cols-6 gap-6 rounded-md p-5">
             {fields.map((item, index) => {
               return (
-                <>
+                <div className="col-span-6 grid grid-cols-6 gap-6">
                   <Field
-                    className="col-span-6 lg:col-span-3"
+                    className="col-span-6 lg:col-span-4"
                     helpText="Add the ethereum address of the stakeholder."
                   >
                     <Input
@@ -215,25 +215,24 @@ export default function CreateReleaseForm({
                       error={errors.stakeholders?.message}
                     />
                   </Field>
-                  <Field
-                    className="col-span-6 lg:col-span-3"
-                    helpText="Add the percentage of the shares."
-                  >
-                    <Input
-                      label="Shares"
-                      name={`stakeholders.${index}.share`}
-                      error={errors.stakeholders?.message}
-                    />
-                    <div className="mx-5" onClick={() => remove(index)}>
+                  <div className="col-span-6 flex lg:col-span-2">
+                    <Field helpText="Add the percentage of the shares.">
+                      <Input
+                        label="Shares"
+                        name={`stakeholders.${index}.share`}
+                        error={errors.stakeholders?.message}
+                      />
+                    </Field>
+                    <div className="mx-5 pt-8" onClick={() => remove(index)}>
                       <MinusCircleIcon className="h-6 w-6" />
                     </div>
-                  </Field>
-                </>
+                  </div>
+                </div>
               );
             })}
             <Field className="col-span-6">
               {errors?.stakeholders && (
-                <p className="text-sm text-red-500">{errors.stakeholders.message}</p>
+                <p className="text-sm font-semibold text-black">{errors.stakeholders.message}</p>
               )}
             </Field>
             <Field className="col-span-6">
@@ -257,9 +256,7 @@ export default function CreateReleaseForm({
             </Button>
           )}
           {!requiredFilesAdded && (
-            <p className="mt-2 text-sm text-gray-500">
-              You're missing an audio file and track artwork.
-            </p>
+            <p className="mt-2 text-sm">You're missing an audio file and track artwork.</p>
           )}
         </Field>
       </form>

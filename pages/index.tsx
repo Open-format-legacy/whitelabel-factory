@@ -138,8 +138,8 @@ const Home: NextPage = () => {
               requiredFilesAdded={requiredFilesAdded}
             />
           </div>
-          <div className="flex flex-col space-y-5 lg:col-span-2">
-            <div className="rounded-md bg-indigo-300">
+          <div className="col-span-2 flex flex-col space-y-5">
+            <div className="gradient-primary rounded-md">
               <ul className="p-5">
                 <h2>Assets</h2>
                 {files.map(({ name, setter, label, text, accept }, i) => (
@@ -157,7 +157,7 @@ const Home: NextPage = () => {
             </div>
             {image && (
               <div>
-                <div className="flex flex-col items-center justify-center rounded-md bg-indigo-500">
+                <div className="gradient-primary flex flex-col items-center justify-center rounded-md">
                   {image ? (
                     <img className="w-full rounded-md" src={URL.createObjectURL(image)} />
                   ) : (
