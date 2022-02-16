@@ -83,6 +83,7 @@ const Home: NextPage = () => {
             }
           });
 
+          localStorage.setItem("release_address", contract.address);
           setLoading(false);
         } catch (e) {
           dismissNotification(awaitingTx);
