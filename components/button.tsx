@@ -4,22 +4,17 @@ interface ButtonProps {
   isLoading?: boolean;
   disabled?: boolean;
 }
-export default function Button({
-  children,
-  onClick,
-  isLoading,
-  ...rest
-}: ButtonProps) {
+export default function Button({ children, onClick, isLoading, ...rest }: ButtonProps) {
   return (
     <button
       onClick={onClick}
       disabled={isLoading}
-      className="bg-indigo-500 hover:bg-indigo-800 max-w-min flex items-center whitespace-nowrap justify-center px-5 py-2 rounded-md shadow-md text-white disabled:opacity-50 disabled:cursor-not-allowed w-full"
+      className="flex w-full max-w-min items-center justify-center whitespace-nowrap rounded-md bg-indigo-500 px-5 py-2 text-white shadow-md hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
       {...rest}
     >
       {isLoading && (
         <svg
-          className="animate-spin h-5 w-5 text-white"
+          className="h-5 w-5 animate-spin text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

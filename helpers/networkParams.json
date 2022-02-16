@@ -10,9 +10,7 @@
       },
       "rpcUrls": ["https://rpc-mumbai.maticvigil.com/"],
       "blockExplorerUrls": ["https://mumbai.polygonscan.com"],
-      "iconUrls": [
-        "https://polygonscan.com/images/svg/brands/polygon.svg?v=1.3"
-      ]
+      "iconUrls": ["https://polygonscan.com/images/svg/brands/polygon.svg?v=1.3"]
     }
   ],
   "polygon_mainnet": [
@@ -26,9 +24,7 @@
       },
       "rpcUrls": ["https://polygon-rpc.com/"],
       "blockExplorerUrls": ["https://polygonscan.com/"],
-      "iconUrls": [
-        "https://polygonscan.com/images/svg/brands/polygon.svg?v=1.3"
-      ]
+      "iconUrls": ["https://polygonscan.com/images/svg/brands/polygon.svg?v=1.3"]
     }
   ]
 }

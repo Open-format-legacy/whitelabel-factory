@@ -34,14 +34,10 @@ export default function Header() {
           {address ? (
             <>
               <ExplorerLink address={address} />
-              <Button onClick={handleReset}>
-                {t("wallet.disconnect_button")}
-              </Button>
+              <Button onClick={handleReset}>{t("wallet.disconnect_button")}</Button>
             </>
           ) : (
-            <Button onClick={connect}>
-              {t("wallet.connect_button")}
-            </Button>
+            <Button onClick={connect}>{t("wallet.connect_button")}</Button>
           )}
         </div>
       </div>

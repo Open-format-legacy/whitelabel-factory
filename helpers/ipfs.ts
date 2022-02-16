@@ -1,7 +1,7 @@
 import { NFTStorage, File } from "nft.storage";
 
 const client = new NFTStorage({
-  token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN,
+  token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN
 });
 
 export async function uploadToIPFS(data: any) {
@@ -22,25 +22,25 @@ export function buildMetadata(
     name,
     description,
     image: new File([image], image.name, {
-      type: image.type,
+      type: image.type
     }),
     audio: new File([audio], audio.name, {
-      type: audio.type,
+      type: audio.type
     }),
     ...(attributes && { attributes }),
     ...(licence && {
       licence: new File([licence], licence.name, {
-        type: licence.type,
-      }),
+        type: licence.type
+      })
     }),
     ...(documents && {
       documents: documents.map(
         (document, i) =>
           new File([document], `${document.name}`, {
-            type: document.type,
+            type: document.type
           })
-      ),
-    }),
+      )
+    })
   };
 
   return data;

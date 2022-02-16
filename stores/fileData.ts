@@ -19,5 +19,5 @@ export default create<FileDataState>((set: any) => ({
   setImage: (image) => set({ image }),
   setAudio: (audio) => set({ audio }),
   setDocuments: (documents) => set({ documents }),
-  setLicence: (licence) => set({ licence }),
+  setLicence: (licence) => set({ licence })
 }));

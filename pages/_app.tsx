@@ -1,30 +1,24 @@
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
-import "../styles/globals.css";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import { Header } from "../components";
 import { addNetwork, NETWORK_ID, readyToTransact } from "../helpers";
 import { initOnboard } from "../services";
 import { useWalletStore } from "../stores";
+import "../styles/globals.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,
-    },
-  },
+      staleTime: Infinity
+    }
+  }
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const {
-    onboard,
-    wallet,
-    setAddress,
-    setNetwork,
-    setBalance,
-    setWallet,
-    setOnboard,
-  } = useWalletStore();
+  const { onboard, wallet, setAddress, setNetwork, setBalance, setWallet, setOnboard } =
+    useWalletStore();
 
   useEffect(() => {
     if (wallet?.provider) {
@@ -44,15 +38,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         } else {
           setWallet();
         }
-      },
+      }
     });
 
     setOnboard(onboard);
   }, []);
 
   useEffect(() => {
-    const previouslySelectedWallet =
-      window.localStorage.getItem("selectedWallet");
+    const previouslySelectedWallet = window.localStorage.getItem("selectedWallet");
 
     if (previouslySelectedWallet && onboard) {
       readyToTransact(onboard, previouslySelectedWallet);
@@ -64,6 +57,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <div className="m-4">
         <Header />
         <Component {...pageProps} />
+        <Toaster />
       </div>
     </QueryClientProvider>
   );
