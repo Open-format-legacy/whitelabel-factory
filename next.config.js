@@ -7,6 +7,6 @@ module.exports = nextTranslate({
     ignoreBuildErrors: true
   },
   eslint: {
-    ignoreDuringBuild: true
+    ignoreDuringBuilds: true
   }
 });
