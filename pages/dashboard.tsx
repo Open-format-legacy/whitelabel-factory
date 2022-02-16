@@ -2,25 +2,52 @@ import { ExternalLinkIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, ExplorerLink } from "../components";
+import { dismissNotification, successNotification } from "../helpers";
 import { useRelease } from "../queries";
 
 export default function DashboardPage() {
   const { query, push } = useRouter();
-  const { status, data, error } = useRelease(query?.address?.toString().toLowerCase());
+  const [refetchInterval, setRefetchInterval] = useState(0);
+  const [address, setAddress] = useState<string>();
+  const { status, data, error } = useRelease(address?.toLowerCase(), refetchInterval);
+
+  useEffect(() => {
+    // @dev The subgraph can take a second to pick up on
+    // the blockchain events. This functions polls until there is data.
+    if (query?.address && !data) {
+      setRefetchInterval(1000);
+    } else {
+      setRefetchInterval(0);
+    }
+  }, [query?.address, data]);
+
   const { register, handleSubmit } = useForm();
+
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("release_address");
+    if (storedAddress) {
+      setAddress(storedAddress);
+    } else if (query?.address) {
+      setAddress(query.address.toString());
+    }
+  }, [query?.address]);
 
   if (status === "loading") return <div>Loading release....</div>;
   if (status === "error") return <div>There was an error: {error?.message}</div>;
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
-      push({ pathname: "/dashboard", query: { address: data.release_address } });
+      push({
+        pathname: "/dashboard",
+        query: { address: data.release_address }
+      });
     }
   }
 
-  if (!query.address)
+  if (!query.address && !localStorage.getItem("release_address"))
     return (
       <form
         className="flex flex-col items-center justify-center"
@@ -92,6 +119,8 @@ export default function DashboardPage() {
   }
 
   if (data) {
+    dismissNotification();
+
     const {
       symbol,
       totalSold,
@@ -165,7 +194,7 @@ export default function DashboardPage() {
       </div>
     );
   } else {
-    return <div>Preparing release...</div>;
+    return <div></div>;
   }
 }
 
