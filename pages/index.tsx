@@ -1,11 +1,11 @@
+import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { FileUpload } from "../components";
-import { createContract, uploadToIPFS, buildMetadata } from "../helpers";
-import { useFileDataStore, useWalletStore } from "../stores";
 import { CreateTrackForm } from "../forms";
-import { ethers } from "ethers";
-import { useRouter } from "next/router";
+import { buildMetadata, createContract, uploadToIPFS } from "../helpers";
+import { useFileDataStore, useWalletStore } from "../stores";
 
 const Home: NextPage = () => {
   const { wallet } = useWalletStore();
@@ -119,7 +119,7 @@ const Home: NextPage = () => {
             />
           </div>
           <div className="col-span-2 flex flex-col space-y-5">
-            <div className="rounded-md bg-indigo-300">
+            <div className="gradient-primary rounded-md">
               <ul className="p-5">
                 <h2>Assets</h2>
                 {files.map(({ name, setter, label, text, accept }, i) => (
@@ -137,7 +137,7 @@ const Home: NextPage = () => {
             </div>
             {image && (
               <div>
-                <div className="flex flex-col items-center justify-center rounded-md bg-indigo-500">
+                <div className="gradient-primary flex flex-col items-center justify-center rounded-md">
                   {image ? (
                     <img className="w-full rounded-md" src={URL.createObjectURL(image)} />
                   ) : (

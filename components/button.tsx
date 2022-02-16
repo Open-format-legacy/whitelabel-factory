@@ -9,7 +9,7 @@ export default function Button({ children, onClick, isLoading, ...rest }: Button
     <button
       onClick={onClick}
       disabled={isLoading}
-      className="flex w-full max-w-min items-center justify-center whitespace-nowrap rounded-md bg-indigo-500 px-5 py-2 text-white shadow-md hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
+      className="gradient-primary flex w-full max-w-min items-center justify-center whitespace-nowrap rounded-md px-5 py-2 text-white shadow-md ring-1 ring-white hover:bg-gradient-to-l disabled:cursor-not-allowed disabled:opacity-50"
       {...rest}
     >
       {isLoading && (
