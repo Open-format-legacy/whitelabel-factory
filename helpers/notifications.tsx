@@ -4,21 +4,37 @@ export function loadingNotification(message: string) {
   return toast.loading(message, {
     icon: "⛏",
     position: "bottom-center",
-    className: "font-semibold tracking-tight"
+    className: "font-semibold",
+    style: {
+      background: "#333",
+      color: "#fff",
+      borderColor: "#2dd4bf",
+      borderWidth: "1px",
+      padding: "1rem",
+      maxWidth: 700
+    }
   });
 }
 
-export function successNotification(message: string) {
+export function successNotification(message: string, duration: number | string = 5000) {
   return toast.success(message, {
-    duration: 5000,
+    duration,
     icon: "🚀",
     position: "bottom-center",
-    className: "font-semibold tracking-tight"
+    className: "font-semibold",
+    style: {
+      background: "#333",
+      color: "#fff",
+      borderColor: "#2dd4bf",
+      borderWidth: "1px",
+      padding: "1rem",
+      maxWidth: 700
+    }
   });
 }
 
-export function dismissNotification(notification: string) {
-  return toast.dismiss(notification);
+export function dismissNotification(notification?: string) {
+  return toast.dismiss(notification ?? undefined);
 }
 
 export function errorNotification(message: string) {
@@ -26,6 +42,14 @@ export function errorNotification(message: string) {
     duration: 5000,
     icon: "😭",
     position: "bottom-center",
-    className: "font-semibold tracking-tight"
+    className: "font-semibold",
+    style: {
+      background: "#333",
+      color: "#fff",
+      borderColor: "#2dd4bf",
+      borderWidth: "1px",
+      padding: "1rem",
+      maxWidth: 700
+    }
   });
 }
