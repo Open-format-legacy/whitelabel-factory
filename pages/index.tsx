@@ -4,18 +4,26 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { FileUpload } from "../components";
 import { CreateTrackForm } from "../forms";
-import { buildMetadata, createContract, uploadToIPFS } from "../helpers";
+import {
+  buildMetadata,
+  createContract,
+  dismissNotification,
+  errorNotification,
+  loadingNotification,
+  successNotification,
+  uploadToIPFS
+} from "../helpers";
 import { useFileDataStore, useWalletStore } from "../stores";
 
 const Home: NextPage = () => {
   const { wallet } = useWalletStore();
-  const { image, audio, licence, documents, setImage, setAudio, setLicence, setDocuments } =
-    useFileDataStore();
+  const { image, audio, licence, documents, setImage, setAudio, setLicence } = useFileDataStore();
   const [isLoading, setLoading] = useState<boolean>(false);
   const { push } = useRouter();
 
   async function handleCreateContract(data: TrackData) {
     setLoading(true);
+    const loading = loadingNotification("Uploading files to IPFS...");
 
     const {
       track_name,
@@ -41,10 +49,13 @@ const Home: NextPage = () => {
 
     const ipfsData = await uploadToIPFS(metadata);
 
+    dismissNotification(loading);
+
     createContract({
       name: "factory",
       provider: wallet?.provider,
       cb: async (factory) => {
+        const awaitingTx = loadingNotification("Review and confirm transaction in Metamask...");
         try {
           const contract = await factory.deploy(
             payees,
@@ -57,7 +68,13 @@ const Home: NextPage = () => {
             ipfsData.url
           );
 
-          const receipt = await contract.deployTransaction.wait();
+          dismissNotification(awaitingTx);
+
+          const pendingTx = loadingNotification("Pending transaction...");
+          await contract.deployTransaction.wait();
+
+          dismissNotification(pendingTx);
+          successNotification("Preparing your release...", "Infinity");
 
           push({
             pathname: "/dashboard",
@@ -69,6 +86,8 @@ const Home: NextPage = () => {
           localStorage.setItem("release_address", contract.address);
           setLoading(false);
         } catch (e) {
+          dismissNotification(awaitingTx);
+          errorNotification(`Transaction Error - ${e.message}`);
           setLoading(false);
         }
       }
@@ -111,15 +130,15 @@ const Home: NextPage = () => {
   return (
     <div>
       {wallet?.provider && (
-        <div className="grid grid-cols-5 gap-5">
-          <div className="col-span-3 flex flex-col">
+        <div className="grid grid-rows-2 gap-5 lg:grid-cols-5">
+          <div className="flex flex-col lg:col-span-3">
             <CreateTrackForm
               onCreateTrack={(data) => handleCreateContract(data)}
               isLoading={isLoading}
               requiredFilesAdded={requiredFilesAdded}
             />
           </div>
-          <div className="col-span-2 flex flex-col space-y-5">
+          <div className="flex flex-col space-y-5 lg:col-span-2">
             <div className="rounded-md bg-indigo-300">
               <ul className="p-5">
                 <h2>Assets</h2>

@@ -1,23 +1,22 @@
-import { FormProvider, useForm, useFieldArray } from "react-hook-form";
 import { MinusCircleIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
-import useTranslation from "next-translate/useTranslation";
-import { useWalletStore } from "../stores";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useTranslation from "next-translate/useTranslation";
+import { useEffect, useState } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import * as yup from "yup";
-
 import { Button, Field, Input, TextArea, Toggle } from "../components";
+import { useWalletStore } from "../stores";
 
-interface CreateReleaseProps {
+interface CreateReleaseFormProps {
   isLoading: boolean;
   onCreateTrack: (data: TrackData) => void;
   requiredFilesAdded: boolean;
 }
-export default function LoginForm({
+export default function CreateReleaseForm({
   isLoading,
   onCreateTrack,
   requiredFilesAdded = false
-}: CreateReleaseProps) {
+}: CreateReleaseFormProps) {
   const { t } = useTranslation("auth");
   const { address } = useWalletStore();
   const [showRoyalties, setShowRoyalties] = useState<boolean>(false);
@@ -78,7 +77,6 @@ export default function LoginForm({
 
   const {
     reset,
-    register,
     formState: { errors },
     watch
   } = form;
@@ -253,12 +251,16 @@ export default function LoginForm({
           </div>
         )}
         <Field className="my-5">
-          <Button isLoading={isLoading} disabled={!requiredFilesAdded}>
-            Create Track
-          </Button>
-          <p className="mt-2 text-sm text-gray-500">
-            You're missing an audio file and track artwork.
-          </p>
+          {!isLoading && (
+            <Button isLoading={isLoading} disabled={!requiredFilesAdded}>
+              Create Track
+            </Button>
+          )}
+          {!requiredFilesAdded && (
+            <p className="mt-2 text-sm text-gray-500">
+              You're missing an audio file and track artwork.
+            </p>
+          )}
         </Field>
       </form>
     </FormProvider>
