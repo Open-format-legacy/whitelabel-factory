@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Header } from "../components";
 import { addNetwork, NETWORK_ID, readyToTransact } from "../helpers";
 import { initOnboard } from "../services";
@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="m-4">
+      <div className="h-full min-h-screen bg-zinc-900 p-4">
         <Header />
         <Component {...pageProps} />
         <Toaster />

@@ -1,6 +1,6 @@
+import useTranslation from "next-translate/useTranslation";
 import { Button, ExplorerLink } from "../components";
 import { useWalletStore } from "../stores";
-import useTranslation from "next-translate/useTranslation";
 
 export default function Header() {
   const { address, onboard, resetWallet } = useWalletStore();
@@ -28,7 +28,7 @@ export default function Header() {
     <header className="w-full py-2 px-2">
       <div className="flex items-center justify-between">
         <a href="/">
-          <h1 className="text-2xl font-bold">The Factory 🏭</h1>
+          <h1 className="text-2xl font-bold text-white">The Factory 🏭</h1>
         </a>
         <div className="flex items-center">
           {address ? (
