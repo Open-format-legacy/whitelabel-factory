@@ -2,15 +2,25 @@ import { ExternalLinkIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { Button, ExplorerLink } from "../components";
 import { useRelease } from "../queries";
 
 export default function DashboardPage() {
   const { query, push } = useRouter();
-  const { status, data, error } = useRelease(query?.address?.toString().toLowerCase());
+  const [address, setAddress] = useState<string>();
+  const { status, data, error } = useRelease(address?.toLowerCase());
   const { register, handleSubmit } = useForm();
+
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("release_address");
+    if (storedAddress) {
+      setAddress(storedAddress);
+    } else if (query?.address) {
+      setAddress(query.address.toString());
+    }
+  }, [query?.address]);
 
   if (status === "loading") return <div>Loading release....</div>;
   if (status === "error") return <div>There was an error: {error?.message}</div>;
@@ -21,7 +31,7 @@ export default function DashboardPage() {
     }
   }
 
-  if (!query.address)
+  if (!query.address && !localStorage.getItem("release_address"))
     return (
       <form
         className="flex flex-col items-center justify-center"
