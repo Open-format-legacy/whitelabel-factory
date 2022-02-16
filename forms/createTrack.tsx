@@ -188,7 +188,7 @@ export default function CreateReleaseForm({
           <div className="gradient-primary my-5 grid grid-cols-6 gap-6 rounded-md p-5">
             <Field
               className="col-span-6 lg:col-span-3"
-              helpText="The percentage of royalties you get whenever a release is sold on the secondary market. Between 0 - 1000. e.g. 250 = 2.5%"
+              helpText="The percentage of royalties you get whenever a release is sold on the secondary market. Between 0 - 10000. e.g. 250 = 2.5%"
               error={errors.royalitiesPercentage?.message}
             >
               <Input
