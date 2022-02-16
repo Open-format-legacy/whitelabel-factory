@@ -7,13 +7,4 @@ import Input from "./input";
 import TextArea from "./textarea";
 import Toggle from "./toggle";
 
-export {
-  Button,
-  ExplorerLink,
-  Header,
-  Field,
-  FileUpload,
-  Input,
-  TextArea,
-  Toggle,
-};
+export { Button, ExplorerLink, Header, Field, FileUpload, Input, TextArea, Toggle };

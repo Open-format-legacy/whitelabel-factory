@@ -21,10 +21,7 @@ export function Input({
   return (
     <div className="w-full">
       {label && (
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
@@ -34,8 +31,8 @@ export function Input({
           id={name}
           rows={rows}
           className={classNames(
-            { "border-red-500 border-2": error },
-            "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            { "border-2 border-red-500": error },
+            "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           )}
           placeholder={placeholder}
           aria-describedby="email-description"
@@ -43,10 +40,7 @@ export function Input({
         />
       </div>
       {helpText && (
-        <p
-          className="mt-2 text-sm text-gray-500"
-          id="email-description"
-        >
+        <p className="mt-2 text-sm text-gray-500" id="email-description">
           {helpText}
         </p>
       )}

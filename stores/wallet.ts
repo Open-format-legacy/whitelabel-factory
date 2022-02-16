@@ -37,5 +37,5 @@ export default create<WalletState>((set: any) => ({
   setBalance: (item) => set({ balance: item }),
   setWallet: (item) => set({ wallet: item }),
   setOnboard: (item) => set({ onboard: item }),
-  resetWallet: () => set({ address: "", network: "", balance: "", wallet: {} }),
+  resetWallet: () => set({ address: "", network: "", balance: "", wallet: {} })
 }));

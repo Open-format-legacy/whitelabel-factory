@@ -6,22 +6,12 @@ interface FieldProps extends Partial<HTMLDivElement> {
   helpText?: string;
 }
 
-export default function Field({
-  children,
-  className,
-  error,
-  helpText,
-}: FieldProps) {
+export default function Field({ children, className, error, helpText }: FieldProps) {
   return (
     <div className={classNames(className, `flex flex-col`)}>
       {children}
 
-      <p
-        className={classNames(
-          error ? "text-red-500" : "text-gray-500",
-          "mt-2 text-sm"
-        )}
-      >
+      <p className={classNames(error ? "text-red-500" : "text-gray-500", "mt-2 text-sm")}>
         {error ?? helpText}
       </p>
     </div>

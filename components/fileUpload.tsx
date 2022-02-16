@@ -8,25 +8,16 @@ interface FileUploadProps {
   accept: string;
 }
 
-export default function FileUpload({
-  onFileUpload,
-  label,
-  text,
-  name,
-  accept,
-}: FileUploadProps) {
+export default function FileUpload({ onFileUpload, label, text, name, accept }: FileUploadProps) {
   return (
     <div className="flex justify-between">
       <div>
         <span>{label}</span>
       </div>
 
-      <label
-        className="flex hover:text-blue-400 font-semibold"
-        htmlFor={name}
-      >
+      <label className="flex font-semibold hover:text-blue-400" htmlFor={name}>
         <span className="whitespace-nowrap">{text}</span>
-        <CloudUploadIcon className="w-6 h-6 mx-2" />
+        <CloudUploadIcon className="mx-2 h-6 w-6" />
       </label>
       <input
         id={name}

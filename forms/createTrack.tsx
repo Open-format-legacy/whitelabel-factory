@@ -1,8 +1,4 @@
-import {
-  FormProvider,
-  useForm,
-  useFieldArray,
-} from "react-hook-form";
+import { FormProvider, useForm, useFieldArray } from "react-hook-form";
 import { MinusCircleIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import useTranslation from "next-translate/useTranslation";
@@ -10,13 +6,7 @@ import { useWalletStore } from "../stores";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import {
-  Button,
-  Field,
-  Input,
-  TextArea,
-  Toggle,
-} from "../components";
+import { Button, Field, Input, TextArea, Toggle } from "../components";
 
 interface CreateReleaseProps {
   isLoading: boolean;
@@ -26,13 +16,12 @@ interface CreateReleaseProps {
 export default function LoginForm({
   isLoading,
   onCreateTrack,
-  requiredFilesAdded = false,
+  requiredFilesAdded = false
 }: CreateReleaseProps) {
   const { t } = useTranslation("auth");
   const { address } = useWalletStore();
   const [showRoyalties, setShowRoyalties] = useState<boolean>(false);
-  const [showStakeholders, setShowStakeholders] =
-    useState<boolean>(false);
+  const [showStakeholders, setShowStakeholders] = useState<boolean>(false);
 
   const emailRequired = t("email.required");
   const emailValid = t("email.valid");
@@ -41,7 +30,7 @@ export default function LoginForm({
 
   const StakeholderSchema = {
     address: yup.string().required(),
-    share: yup.number().required(),
+    share: yup.number().required()
   };
 
   const ReleaseSchema = yup.object().shape({
@@ -67,7 +56,7 @@ export default function LoginForm({
 
             return total === 100;
           })
-      : yup.array().nullable(),
+      : yup.array().nullable()
   });
 
   const form = useForm<TrackData>({
@@ -78,27 +67,27 @@ export default function LoginForm({
       track_name: "Big",
       symbol: "TOON",
       salePrice: 1,
-      quantity: 500,
-    },
+      quantity: 500
+    }
   });
 
   const { remove, fields, append } = useFieldArray({
     control: form.control,
-    name: "stakeholders",
+    name: "stakeholders"
   });
 
   const {
     reset,
     register,
     formState: { errors },
-    watch,
+    watch
   } = form;
 
   useEffect(() => {
     if (address) {
       reset({
         stakeholders: [{ address, share: 100 }],
-        royalitiesPercentage: 0,
+        royalitiesPercentage: 0
       });
     }
   }, [address]);
@@ -108,7 +97,7 @@ export default function LoginForm({
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onCreateTrack)}>
-        <div className="flex flex-col bg-indigo-300 p-5 rounded-md">
+        <div className="flex flex-col rounded-md bg-indigo-300 p-5">
           <div className="grid grid-cols-6 gap-6">
             <Field
               className="col-span-6 lg:col-span-2"
@@ -160,7 +149,7 @@ export default function LoginForm({
             </Field>
           </div>
         </div>
-        <div className="grid grid-cols-6 gap-6 my-5 bg-indigo-300 p-5 rounded-md">
+        <div className="my-5 grid grid-cols-6 gap-6 rounded-md bg-indigo-300 p-5">
           <Field
             className="col-span-6 lg:col-span-3"
             helpText="How many releases are available. Leave blank for unlimited."
@@ -187,11 +176,7 @@ export default function LoginForm({
             />
           </Field>
           <Field className="col-span-6 lg:col-span-3">
-            <Toggle
-              enabled={showRoyalties}
-              setEnabled={setShowRoyalties}
-              label="Add royalties"
-            />
+            <Toggle enabled={showRoyalties} setEnabled={setShowRoyalties} label="Add royalties" />
           </Field>
           <Field className="col-span-6 lg:col-span-3">
             <Toggle
@@ -202,7 +187,7 @@ export default function LoginForm({
           </Field>
         </div>
         {showRoyalties && (
-          <div className="grid grid-cols-6 gap-6 my-5 bg-indigo-300 p-5 rounded-md">
+          <div className="my-5 grid grid-cols-6 gap-6 rounded-md bg-indigo-300 p-5">
             <Field
               className="col-span-6 lg:col-span-3"
               helpText="The percentage of royalties you get whenever a release is sold on the secondary market. This can be to two decimals places. e.g 25.39"
@@ -218,7 +203,7 @@ export default function LoginForm({
           </div>
         )}
         {showStakeholders && (
-          <div className="grid grid-cols-6 gap-6 my-5 bg-indigo-300 p-5 rounded-md">
+          <div className="my-5 grid grid-cols-6 gap-6 rounded-md bg-indigo-300 p-5">
             {fields.map((item, index) => {
               return (
                 <>
@@ -241,10 +226,7 @@ export default function LoginForm({
                       name={`stakeholders.${index}.share`}
                       error={errors.stakeholders?.message}
                     />
-                    <div
-                      className="mx-5"
-                      onClick={() => remove(index)}
-                    >
+                    <div className="mx-5" onClick={() => remove(index)}>
                       <MinusCircleIcon className="h-6 w-6" />
                     </div>
                   </Field>
@@ -253,9 +235,7 @@ export default function LoginForm({
             })}
             <Field className="col-span-6">
               {errors?.stakeholders && (
-                <p className="text-sm text-red-500">
-                  {errors.stakeholders.message}
-                </p>
+                <p className="text-sm text-red-500">{errors.stakeholders.message}</p>
               )}
             </Field>
             <Field className="col-span-6">
@@ -263,7 +243,7 @@ export default function LoginForm({
                 onClick={() => {
                   append({
                     address: "",
-                    share: undefined,
+                    share: undefined
                   });
                 }}
               >
@@ -273,10 +253,7 @@ export default function LoginForm({
           </div>
         )}
         <Field className="my-5">
-          <Button
-            isLoading={isLoading}
-            disabled={!requiredFilesAdded}
-          >
+          <Button isLoading={isLoading} disabled={!requiredFilesAdded}>
             Create Track
           </Button>
           <p className="mt-2 text-sm text-gray-500">
