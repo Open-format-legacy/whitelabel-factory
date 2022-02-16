@@ -1,6 +1,5 @@
+import { gql, request } from "graphql-request";
 import { useQuery } from "react-query";
-
-import { request, gql } from "graphql-request";
 
 const endpoint = "https://api.thegraph.com/subgraphs/name/tinypell3ts/music-factory";
 
