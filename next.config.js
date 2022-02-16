@@ -4,6 +4,9 @@ const nextTranslate = require("next-translate");
 module.exports = nextTranslate({
   reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true
   },
+  eslint: {
+    ignoreDuringBuild: true
+  }
 });
