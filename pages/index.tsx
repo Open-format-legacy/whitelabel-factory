@@ -1,11 +1,11 @@
+import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { FileUpload } from "../components";
-import { createContract, uploadToIPFS, buildMetadata } from "../helpers";
-import { useFileDataStore, useWalletStore } from "../stores";
 import { CreateTrackForm } from "../forms";
-import { ethers } from "ethers";
-import { useRouter } from "next/router";
+import { buildMetadata, createContract, uploadToIPFS } from "../helpers";
+import { useFileDataStore, useWalletStore } from "../stores";
 
 const Home: NextPage = () => {
   const { wallet } = useWalletStore();
@@ -66,6 +66,7 @@ const Home: NextPage = () => {
             }
           });
 
+          localStorage.setItem("release_address", contract.address);
           setLoading(false);
         } catch (e) {
           setLoading(false);
