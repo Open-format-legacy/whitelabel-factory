@@ -2,14 +2,31 @@ import { ExternalLinkIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { Button, ExplorerLink } from "../components";
+import { dismissNotification, successNotification } from "../helpers";
 import { useRelease } from "../queries";
 
 export default function DashboardPage() {
   const { query, push } = useRouter();
-  const { status, data, error } = useRelease(query?.address?.toString().toLowerCase());
+  const [refetchInterval, setRefetchInterval] = useState(0);
+
+  const { status, data, error } = useRelease(
+    query?.address?.toString().toLowerCase(),
+    refetchInterval
+  );
+
+  useEffect(() => {
+    // @dev The subgraph can take a second to pick up on
+    // the blockchain events. This functions polls until there is data.
+    if (query?.address && !data) {
+      setRefetchInterval(1000);
+    } else {
+      setRefetchInterval(0);
+    }
+  }, [query?.address, data]);
+
   const { register, handleSubmit } = useForm();
 
   if (status === "loading") return <div>Loading release....</div>;
@@ -17,7 +34,10 @@ export default function DashboardPage() {
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
-      push({ pathname: "/dashboard", query: { address: data.release_address } });
+      push({
+        pathname: "/dashboard",
+        query: { address: data.release_address }
+      });
     }
   }
 
@@ -93,6 +113,8 @@ export default function DashboardPage() {
   }
 
   if (data) {
+    dismissNotification();
+
     const {
       symbol,
       totalSold,
@@ -168,7 +190,7 @@ export default function DashboardPage() {
       </div>
     );
   } else {
-    return <div>Preparing release...</div>;
+    return <div></div>;
   }
 }
 
