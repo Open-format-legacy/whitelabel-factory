@@ -1,4 +1,4 @@
-import classNames from "classNames";
+import classNames from "classnames";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface InputProps extends Partial<HTMLInputElement> {
