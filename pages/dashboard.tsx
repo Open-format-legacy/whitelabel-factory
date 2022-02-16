@@ -89,7 +89,7 @@ export default function DashboardPage() {
             </div>
           ))}
           {data.licence && (
-            <a href={transformURL(data?.licence)} noreferrer target="_blank">
+            <a href={transformURL(data?.licence)} rel="noreferrer" target="_blank">
               <div className="flex py-5 hover:text-teal-300">
                 <p className="text-lg font-bold">View Licence</p>
                 <ExternalLinkIcon className="mx-2 h-6 w-6" />
