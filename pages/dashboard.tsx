@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-
 import { Button, ExplorerLink } from "../components";
 import { useRelease } from "../queries";
 
@@ -41,7 +40,7 @@ export default function DashboardPage() {
 
   function StatsCard({ children }) {
     return (
-      <li className="flex justify-center rounded-lg py-20 shadow">
+      <li className="gradient-primary flex justify-center rounded-lg py-20 shadow">
         <div className="flex flex-col items-center justify-center space-x-2">{children}</div>
       </li>
     );
@@ -54,12 +53,12 @@ export default function DashboardPage() {
       { title: "Track Description", value: data.description }
     ];
     return (
-      <li className="flex justify-center rounded-lg py-10 shadow">
+      <li className="gradient-primary flex justify-center rounded-lg py-10 shadow">
         <div className="flex flex-col items-center justify-center space-x-2">
           {items.map(({ title, value }, i) => (
             <div className="py-2 text-center" key={i}>
-              <p className="text-lg font-bold">{title}</p>
-              <p>{value}</p>
+              <p className="text-lg font-bold ">{title}</p>
+              <p className="text-black">{value}</p>
             </div>
           ))}
           {data.licence && (
@@ -79,7 +78,7 @@ export default function DashboardPage() {
     return (
       <li className="flex justify-center rounded-lg">
         <div className="flex flex-col items-center justify-center space-y-2">
-          <img loading="lazy" src={transformURL(data.image)} />
+          <img loading="lazy" className="rounded-lg" src={transformURL(data.image)} />
           <audio className="w-full" id="audio" controls>
             <source src={transformURL(data.audio)} id="src" />
           </audio>
@@ -110,30 +109,28 @@ export default function DashboardPage() {
           <StatsCard>
             <p>Total Sold</p>
             <p className="text-5xl font-semibold">{`${totalSold}/${maxSupply}`}</p>
-            {symbol && <p className="text-sm font-semibold text-gray-500">{symbol}</p>}
+            {symbol && <p className="text-sm font-semibold text-black">{symbol}</p>}
           </StatsCard>
           <StatsCard>
             <p>Total Earnings</p>
             <p className="text-5xl font-semibold">{fromWei(totalEarnings)}</p>
-            {symbol && <p className="text-sm font-semibold text-gray-500">MATIC</p>}
+            {symbol && <p className="text-sm font-semibold text-black">MATIC</p>}
           </StatsCard>
           <StatsCard>
             <p>Royalties</p>
             <p className="text-5xl font-semibold">{`${parseInt(royaltiesPercentage) / 100}%`}</p>
-            {symbol && (
-              <p className="text-sm font-semibold text-gray-500">of each secondary sale</p>
-            )}
+            {symbol && <p className="text-sm font-semibold text-black">of each secondary sale</p>}
           </StatsCard>
           <StatsCard>
             <p>Sale price</p>
             <p className="text-5xl font-semibold">{fromWei(salePrice)}</p>
-            {symbol && <p className="text-sm font-semibold text-gray-500">MATIC</p>}
+            {symbol && <p className="text-sm font-semibold text-black">MATIC</p>}
           </StatsCard>
           <MetadataCard />
           <MediaCard />
         </div>
         <div className="grid gap-y-5 lg:col-span-2 lg:px-5">
-          <div className="w-full bg-white p-5 shadow sm:rounded-md">
+          <div className="gradient-primary w-full bg-white p-5 shadow sm:rounded-md">
             <h1>Shareholders</h1>
             <ul role="list" className="divide-y divide-gray-200">
               {stakeholders.map((stakeholder, i) => (
@@ -146,7 +143,7 @@ export default function DashboardPage() {
             </ul>
           </div>
           {Boolean(payouts && payouts.length) && (
-            <div className="w-full bg-white p-5 shadow sm:rounded-md">
+            <div className="gradient-primary w-full bg-white p-5 shadow sm:rounded-md">
               <h1>Payouts</h1>
               <ul role="list" className="divide-y divide-gray-200">
                 {payouts.map((payout, i) => (
