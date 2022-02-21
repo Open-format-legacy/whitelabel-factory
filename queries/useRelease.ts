@@ -32,7 +32,7 @@ export default function useRelease(address: string, refetchInterval = 0) {
 						payouts {
 							id
 							amount
-							createdAtTimestamp
+							createdAt
 							transactionHash
 						}
 						creator {
