@@ -4,12 +4,21 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, ExplorerLink } from "../components";
-import { dismissNotification, successNotification } from "../helpers";
-import { useRelease } from "../queries";
+import theFactory from "../../abis/theFactory.json";
+import { Button, ExplorerLink } from "../../components";
+import {
+  dismissNotification,
+  errorNotification,
+  formatRevert,
+  loadingNotification,
+  successNotification
+} from "../../helpers";
+import { useRelease } from "../../queries";
+import { useWalletStore } from "../../stores";
 
 export default function DashboardPage() {
   const { query, push } = useRouter();
+  const { wallet } = useWalletStore();
   const [refetchInterval, setRefetchInterval] = useState(0);
   const [address, setAddress] = useState<string>();
   const { status, data, error } = useRelease(address?.toLowerCase(), refetchInterval);
@@ -40,10 +49,7 @@ export default function DashboardPage() {
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
-      push({
-        pathname: "/dashboard",
-        query: { address: data.release_address }
-      });
+      push(`/dashboard/${data.release_address}`);
     }
   }
 
@@ -64,6 +70,26 @@ export default function DashboardPage() {
         </div>
       </form>
     );
+
+  async function releaseFundsToStakeholder(address: string) {
+    console.log({ address });
+    if (wallet.provider && query.address) {
+      try {
+        console.log(query.address.toString());
+        const provider = new ethers.providers.Web3Provider(wallet.provider);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(query.address.toString(), theFactory.abi, signer);
+        console.log({ contract });
+        const tx = await contract["release(address)"](address);
+        const pendingTx = loadingNotification("Pending transaction...", 30000);
+        await tx.wait();
+        dismissNotification(pendingTx);
+        successNotification("Funds released");
+      } catch (e: any) {
+        errorNotification(formatRevert(e.data.message));
+      }
+    }
+  }
 
   function StatsCard({ children }) {
     return (
@@ -163,10 +189,12 @@ export default function DashboardPage() {
             <h1>Shareholders</h1>
             <ul role="list" className="divide-y divide-gray-200">
               {stakeholders.map((stakeholder, i) => (
-                <li className="flex justify-between py-2" key={i}>
-                  <ExplorerLink address={stakeholder.id.split("-")[0]} truncate={false} />
-
+                <li className="flex items-center justify-between py-2" key={i}>
+                  <ExplorerLink address={stakeholder.id.split("-")[0]} />
                   <p>{stakeholder.share}%</p>
+                  <Button onClick={() => releaseFundsToStakeholder(stakeholder.id.split("-")[0])}>
+                    Release Funds
+                  </Button>
                 </li>
               ))}
             </ul>
@@ -180,9 +208,9 @@ export default function DashboardPage() {
                     <ExplorerLink address={payout.transactionHash} isTx={true} />
                     <p>{fromWei(payout.amount)}MATIC</p>
                     <div>
-                      <span>{dayjs.unix(payout.createdAtTimestamp).format("DD-MM-YYYY")}</span>
+                      <span>{dayjs.unix(payout.createdAt).format("DD-MM-YYYY")}</span>
                       <span className="mx-2 text-xs">
-                        {dayjs.unix(payout.createdAtTimestamp).format("hh:mm:ss")}
+                        {dayjs.unix(payout.createdAt).format("HH:mm:ss")}
                       </span>
                     </div>
                   </li>

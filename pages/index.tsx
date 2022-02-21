@@ -78,12 +78,7 @@ const Home: NextPage = () => {
           dismissNotification(pendingTx);
           successNotification("Preparing your release...", "Infinity");
 
-          push({
-            pathname: "/dashboard",
-            query: {
-              address: contract.address
-            }
-          });
+          push(`/dashboard/${contract.address}`);
 
           localStorage.setItem("release_address", contract.address);
           setLoading(false);
