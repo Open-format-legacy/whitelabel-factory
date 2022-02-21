@@ -1,6 +1,19 @@
 {
+  "header": {
+    "name": "The Factory 🏭",
+    "tagline": "Release your music as an NFT."
+  },
   "wallet": {
     "connect_button": "Connect wallet",
-    "disconnect_button": "Disconnect"
+    "disconnect_button": "Disconnect",
+    "connect_prompt": "Connect your wallet to begin."
+  },
+  "royalties": {
+    "title": "Royalties",
+    "description": "Here you can set the royalty percentage you receive as an artist on every secondary sale"
+  },
+  "stakeholders": {
+    "title": "Stakeholders",
+    "description": "Add stakeholders to your release. You can allocate 100 shares between multiple stakeholders. Each share equates to 1% of every primary sale of your release. "
   }
 }

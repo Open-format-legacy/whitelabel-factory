@@ -17,7 +17,7 @@ export default function CreateReleaseForm({
   onCreateTrack,
   requiredFilesAdded = false
 }: CreateReleaseFormProps) {
-  const { t } = useTranslation("auth");
+  const { t } = useTranslation("common");
   const { address } = useWalletStore();
   const [showRoyalties, setShowRoyalties] = useState<boolean>(false);
   const [showStakeholders, setShowStakeholders] = useState<boolean>(false);
@@ -185,68 +185,76 @@ export default function CreateReleaseForm({
           </Field>
         </div>
         {showRoyalties && (
-          <div className="gradient-primary my-5 grid grid-cols-6 gap-6 rounded-md p-5">
-            <Field
-              className="col-span-6 lg:col-span-3"
-              helpText="The percentage of royalties you get whenever a release is sold on the secondary market. Between 0 - 10000. e.g. 250 = 2.5%"
-              error={errors.royalitiesPercentage?.message}
-            >
-              <Input
-                name="royalitiesPercentage"
-                label="Royalty Percentage"
-                trailing="%"
+          <div className="gradient-primary rounded-md p-5">
+            <h1>{t("royalties.title")}</h1>
+            <p className="text-sm font-semibold">{t("royalties.description")}</p>
+            <div className="my-5 grid grid-cols-6 gap-6">
+              <Field
+                className="col-span-6 lg:col-span-3"
+                helpText="Choose a number between 0 - 10000. e.g 250 = 2.5%."
                 error={errors.royalitiesPercentage?.message}
-              />
-            </Field>
+              >
+                <Input
+                  name="royalitiesPercentage"
+                  label="Royalty Percentage"
+                  trailing="%"
+                  error={errors.royalitiesPercentage?.message}
+                />
+              </Field>
+            </div>
           </div>
         )}
         {showStakeholders && (
-          <div className="gradient-primary my-5 grid grid-cols-6 gap-6 rounded-md p-5">
-            {fields.map((item, index) => {
-              return (
-                <div className="col-span-6 grid grid-cols-6 gap-6">
-                  <Field
-                    className="col-span-6 lg:col-span-4"
-                    helpText="Add the ethereum address of the stakeholder."
-                  >
-                    <Input
-                      label="Address"
-                      name={`stakeholders.${index}.address`}
-                      error={errors.stakeholders?.message}
-                    />
-                  </Field>
-                  <div className="col-span-6 flex lg:col-span-2">
-                    <Field helpText="Add the percentage of the shares.">
+          <div className="gradient-primary my-5 rounded-md p-5">
+            <h1>{t("stakeholders.title")}</h1>
+            <p className="text-sm font-semibold">{t("stakeholders.description")}</p>
+            <div className="my-5 grid grid-cols-6 gap-6">
+              {fields.map((item, index) => {
+                return (
+                  <div key={index} className="col-span-6 grid grid-cols-6 gap-6">
+                    <Field
+                      className="col-span-6 lg:col-span-4"
+                      helpText="Add the ethereum address of the stakeholder."
+                    >
                       <Input
-                        label="Shares"
-                        name={`stakeholders.${index}.share`}
+                        label="Address"
+                        name={`stakeholders.${index}.address`}
                         error={errors.stakeholders?.message}
                       />
                     </Field>
-                    <div className="mx-5 pt-8" onClick={() => remove(index)}>
-                      <MinusCircleIcon className="h-6 w-6" />
+                    <div className="col-span-6 flex lg:col-span-2">
+                      <Field helpText="Add the percentage of the shares.">
+                        <Input
+                          label="Shares"
+                          name={`stakeholders.${index}.share`}
+                          error={errors.stakeholders?.message}
+                        />
+                      </Field>
+                      <div className="mx-5 pt-8" onClick={() => remove(index)}>
+                        <MinusCircleIcon className="h-6 w-6" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-            <Field className="col-span-6">
-              {errors?.stakeholders && (
-                <p className="text-sm font-semibold text-black">{errors.stakeholders.message}</p>
-              )}
-            </Field>
-            <Field className="col-span-6">
-              <Button
-                onClick={() => {
-                  append({
-                    address: "",
-                    share: undefined
-                  });
-                }}
-              >
-                Add stakeholder
-              </Button>
-            </Field>
+                );
+              })}
+              <Field className="col-span-6">
+                {errors?.stakeholders && (
+                  <p className="text-sm font-semibold text-black">{errors.stakeholders.message}</p>
+                )}
+              </Field>
+              <Field className="col-span-6">
+                <Button
+                  onClick={() => {
+                    append({
+                      address: "",
+                      share: undefined
+                    });
+                  }}
+                >
+                  Add stakeholder
+                </Button>
+              </Field>
+            </div>
           </div>
         )}
         <Field className="my-5">

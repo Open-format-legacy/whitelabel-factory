@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FileUpload } from "../components";
@@ -16,10 +17,11 @@ import {
 import { useFileDataStore, useWalletStore } from "../stores";
 
 const Home: NextPage = () => {
-  const { wallet } = useWalletStore();
+  const { wallet, address } = useWalletStore();
   const { image, audio, licence, documents, setImage, setAudio, setLicence } = useFileDataStore();
   const [isLoading, setLoading] = useState<boolean>(false);
   const { push } = useRouter();
+  const { t } = useTranslation("common");
 
   async function handleCreateContract(data: TrackData) {
     setLoading(true);
@@ -129,7 +131,7 @@ const Home: NextPage = () => {
 
   const requiredFilesAdded = Boolean(audio?.name && image?.name);
 
-  return (
+  return address ? (
     <div>
       {wallet?.provider && (
         <div className="grid grid-rows-2 gap-5 lg:grid-cols-5">
@@ -185,6 +187,12 @@ const Home: NextPage = () => {
           </div>
         </div>
       )}
+    </div>
+  ) : (
+    <div className="flex items-center justify-center">
+      <h1 className="gradient-primary-text text-5xl font-semibold leading-loose">
+        {t("wallet.connect_prompt")}
+      </h1>
     </div>
   );
 };
