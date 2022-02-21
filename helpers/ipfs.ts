@@ -1,4 +1,4 @@
-import { NFTStorage, File } from "nft.storage";
+import { File, NFTStorage } from "nft.storage";
 
 const client = new NFTStorage({
   token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN
@@ -10,6 +10,7 @@ export async function uploadToIPFS(data: any) {
 }
 
 export function buildMetadata(
+  artist: string,
   name: string,
   description: string,
   image: File,
@@ -19,6 +20,7 @@ export function buildMetadata(
   documents: File[]
 ) {
   const data = {
+    artist,
     name,
     description,
     image: new File([image], image.name, {
