@@ -27,8 +27,11 @@ export default function Header() {
   return (
     <header className="w-full py-2 px-2">
       <div className="flex items-center justify-between">
-        <a href="/">
-          <h1 className="text-2xl font-bold text-white">The Factory 🏭</h1>
+        <a className="flex" href="/">
+          <h1 className=" text-5xl font-bold leading-none tracking-tighter text-white hover:text-pink-500">
+            whitelabel.
+          </h1>
+          <p className="text-sm font-bold">Factory</p>
         </a>
         <div className="flex items-center">
           {address ? (
