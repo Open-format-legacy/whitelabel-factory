@@ -26,6 +26,7 @@ const Home: NextPage = () => {
     const loading = loadingNotification("Uploading files to IPFS...");
 
     const {
+      artist,
       track_name,
       track_description,
       symbol,
@@ -38,6 +39,7 @@ const Home: NextPage = () => {
     const shares = stakeholders.map((stakeholder) => stakeholder.share);
 
     const metadata = buildMetadata(
+      artist,
       track_name,
       track_description,
       image,
