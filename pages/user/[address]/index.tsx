@@ -14,8 +14,8 @@ export default function UserPage() {
   const { query, push } = useRouter();
   const { address } = useWalletStore();
   const { t } = useTranslation("common");
-  const { isLoading, data, error } = useCreatorReleases(query?.address.toString());
-  const isValidAddress = ethers.utils.isAddress(query?.address.toString());
+  const { isLoading, data, error } = useCreatorReleases(query?.address.toLowerCase());
+  const isValidAddress = ethers.utils.isAddress(query?.address.toLowerCase());
 
   useEffect(() => {
     if (address) {

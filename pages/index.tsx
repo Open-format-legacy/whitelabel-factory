@@ -80,7 +80,7 @@ const Home: NextPage = () => {
           dismissNotification(pendingTx);
           successNotification("Preparing your release...", "Infinity");
 
-          push(`/user/${address}/releases/${contract.address}`);
+          push(`/user/${address.toLowerCase()}/releases/${contract.address.toLowerCase()}`);
 
           setLoading(false);
         } catch (e) {

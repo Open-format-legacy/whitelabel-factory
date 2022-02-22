@@ -47,7 +47,7 @@ export default function DashboardPage() {
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
-      push(`/user/${connectedAddress}/${data.release_address}`);
+      push(`/user/${connectedAddress.toLowerCase()}/${data.release_address.toLowerCase()}`);
     }
   }
 
