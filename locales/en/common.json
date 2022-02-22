@@ -17,5 +17,8 @@
   "stakeholders": {
     "title": "Stakeholders",
     "description": "Add stakeholders to your release. You can allocate 100 shares between multiple stakeholders. Each share equates to 1% of every primary sale of your release. "
+  },
+  "user": {
+    "no_releases": "No releases found"
   }
 }
