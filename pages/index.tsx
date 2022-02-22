@@ -52,44 +52,52 @@ const Home: NextPage = () => {
     );
 
     const ipfsData = await uploadToIPFS(metadata);
+    const { name, description } = ipfsData.data;
+    //@todo Sketchy, fix this.
+    const metadataIsValid =
+      ipfsData.data.artist && ipfsData.data.audio && ipfsData.data.image && name && description;
 
     dismissNotification(loading);
+    if (metadataIsValid) {
+      createContract({
+        name: "factory",
+        provider: wallet?.provider,
+        cb: async (factory) => {
+          const awaitingTx = loadingNotification("Review and confirm transaction in Metamask...");
+          try {
+            const contract = await factory.deploy(
+              payees,
+              shares,
+              salePrice ? ethers.utils.parseEther(salePrice.toString()) : 0,
+              name,
+              symbol,
+              quantity,
+              royalitiesPercentage,
+              ipfsData.url
+            );
 
-    createContract({
-      name: "factory",
-      provider: wallet?.provider,
-      cb: async (factory) => {
-        const awaitingTx = loadingNotification("Review and confirm transaction in Metamask...");
-        try {
-          const contract = await factory.deploy(
-            payees,
-            shares,
-            salePrice ? ethers.utils.parseEther(salePrice.toString()) : 0,
-            name,
-            symbol,
-            quantity,
-            royalitiesPercentage,
-            ipfsData.url
-          );
+            dismissNotification(awaitingTx);
 
-          dismissNotification(awaitingTx);
+            const pendingTx = loadingNotification("Pending transaction...");
+            await contract.deployTransaction.wait();
 
-          const pendingTx = loadingNotification("Pending transaction...");
-          await contract.deployTransaction.wait();
+            dismissNotification(pendingTx);
+            successNotification("Preparing your release...", "Infinity");
 
-          dismissNotification(pendingTx);
-          successNotification("Preparing your release...", "Infinity");
+            push(`/user/${address.toLowerCase()}/releases/${contract.address.toLowerCase()}`);
 
-          push(`/user/${address.toLowerCase()}/releases/${contract.address.toLowerCase()}`);
-
-          setLoading(false);
-        } catch (e) {
-          dismissNotification(awaitingTx);
-          errorNotification(`Transaction Error - ${e.message}`);
-          setLoading(false);
+            setLoading(false);
+          } catch (e) {
+            dismissNotification(awaitingTx);
+            errorNotification(`Transaction Error - ${e.message}`);
+            setLoading(false);
+          }
         }
-      }
-    });
+      });
+    } else {
+      errorNotification("Error uploading to IPFS, Please try again.");
+      setLoading(false);
+    }
   }
 
   function handleFileUpload(e, setter) {
