@@ -86,7 +86,7 @@ export default function CreateReleaseForm({
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onCreateTrack)}>
+      <form className="w-full" onSubmit={form.handleSubmit(onCreateTrack)}>
         <div className="gradient-primary flex flex-col rounded-md p-5">
           <div className="grid grid-cols-6 gap-6">
             <Field

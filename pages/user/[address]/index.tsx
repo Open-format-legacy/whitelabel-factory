@@ -43,7 +43,7 @@ export default function UserPage() {
     );
   return (
     data && (
-      <ul className="my-5 space-y-5">
+      <ul className="space-y-5 md:my-5">
         {data.map((release: Release, i: number) => (
           <Link href={`/user/${address}/releases/${release.id}`}>
             <a className="mx-5">

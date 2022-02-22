@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="h-full min-h-screen bg-zinc-900 p-4">
+      <div className="h-full min-h-screen bg-zinc-900 p-2 md:p-4">
         <Header />
         <Component {...pageProps} />
         <Toaster />

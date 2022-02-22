@@ -28,7 +28,7 @@ export default function Header() {
 
   return (
     <header className="w-full py-2 px-2">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center justify-between md:flex-row">
         <div>
           <a className="flex" href="/">
             <h1 className=" text-5xl font-bold leading-none tracking-tighter text-white hover:text-pink-500">
@@ -36,11 +36,11 @@ export default function Header() {
             </h1>
             <p className="text-sm font-bold">{t("header.product")}</p>
           </a>
-          <p className="font-bold text-pink-500">{t("header.tagline")}</p>
+          <p className="text-center font-bold text-pink-500 md:text-left">{t("header.tagline")}</p>
         </div>
         <div className="flex items-center">
           {address ? (
-            <div className="flex items-center space-x-5">
+            <div className="flex flex-col items-center space-y-5 py-2 md:flex-row md:space-x-3 md:space-y-0 md:py-0">
               <ExplorerLink address={address} />
               <Button onClick={handleReset}>{t("wallet.disconnect_button")}</Button>
               <Button onClick={() => push(`/user/${address}`)}>{t("header.user_releases")}</Button>

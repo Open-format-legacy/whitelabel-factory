@@ -136,8 +136,8 @@ const Home: NextPage = () => {
   return address ? (
     <div>
       {wallet?.provider && (
-        <div className="grid grid-rows-2 gap-5 lg:grid-cols-5">
-          <div className="flex flex-col lg:col-span-3">
+        <div className="grid grid-cols-1 grid-rows-2 lg:grid-cols-5 lg:gap-5">
+          <div className="col-span-1 flex w-full lg:col-span-3">
             <CreateTrackForm
               onCreateTrack={(data) => handleCreateContract(data)}
               isLoading={isLoading}
