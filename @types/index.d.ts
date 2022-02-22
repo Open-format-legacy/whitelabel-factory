@@ -34,7 +34,8 @@ type Release = {
   id: string;
   name: string;
   symbol: string;
-  creator: Owner;
+  creator: string;
+  artist: Artist;
   maxSupply: string;
   totalEarnings: string;
   totalSold: string;
@@ -75,4 +76,9 @@ type OwnerReleases = {
   id: string;
   owner: Owner;
   release: Release;
+};
+
+type Artist = {
+  id: string;
+  name: string;
 };
