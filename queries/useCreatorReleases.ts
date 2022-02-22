@@ -11,7 +11,7 @@ export default function useRelease(address: string, refetchInterval = 0) {
         endpoint,
         gql`
 				query {
-					releases(where: {creator: "${address}"}) {
+					releases(where: {creator: "${address}"}, orderBy: createdAt, orderDirection: desc) {
 						id
 						name
 						symbol
@@ -23,6 +23,7 @@ export default function useRelease(address: string, refetchInterval = 0) {
 						salePrice
 						image
 						audio
+						createdAt
 						description
 						licence
 						stakeholders {
@@ -35,8 +36,8 @@ export default function useRelease(address: string, refetchInterval = 0) {
 							createdAt
 							transactionHash
 						}
-						creator {
-							id
+						artist {
+							name
 						}
 					}
 				}
