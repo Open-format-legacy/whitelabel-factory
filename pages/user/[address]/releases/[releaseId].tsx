@@ -70,14 +70,12 @@ export default function DashboardPage() {
     );
 
   async function releaseFundsToStakeholder(address: string) {
-    console.log({ address });
     if (wallet.provider && query.releaseId) {
       try {
-        console.log(query.releaseId.toString());
         const provider = new ethers.providers.Web3Provider(wallet.provider);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(query.releaseId.toString(), theFactory.abi, signer);
-        console.log({ contract });
+
         const tx = await contract["release(address)"](address);
         const pendingTx = loadingNotification("Pending transaction...", 30000);
         await tx.wait();
@@ -220,6 +218,6 @@ export default function DashboardPage() {
       </div>
     );
   } else {
-    return <div></div>;
+    return null;
   }
 }
