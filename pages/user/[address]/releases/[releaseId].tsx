@@ -1,6 +1,7 @@
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 import { ethers } from "ethers";
+import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,6 +22,7 @@ export default function DashboardPage() {
   const { query, push } = useRouter();
   const { wallet, address: connectedAddress } = useWalletStore();
   const [refetchInterval, setRefetchInterval] = useState(0);
+  const { t } = useTranslation("common");
   const [address, setAddress] = useState<string>();
   const { data, error, isLoading } = useRelease(address?.toLowerCase(), refetchInterval);
 
@@ -138,6 +140,16 @@ export default function DashboardPage() {
 
   function fromWei(amount: string) {
     return ethers.utils.formatEther(amount);
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="gradient-primary-text text-5xl font-semibold leading-loose">
+          {t("user.preparing_release")}
+        </h1>
+      </div>
+    );
   }
 
   if (data) {
