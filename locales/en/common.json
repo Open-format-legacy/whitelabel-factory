@@ -1,8 +1,10 @@
 {
   "header": {
     "name": "The Factory 🏭",
-    "tagline": "Release your music as an NFT."
+    "tagline": "Release your music as an NFT.",
+    "user_releases": "My releases"
   },
+
   "wallet": {
     "connect_button": "Connect wallet",
     "disconnect_button": "Disconnect",

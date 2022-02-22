@@ -1,9 +1,11 @@
 import useTranslation from "next-translate/useTranslation";
+import { useRouter } from "next/router";
 import { Button, ExplorerLink } from "../components";
 import { useWalletStore } from "../stores";
 
 export default function Header() {
   const { address, onboard, resetWallet } = useWalletStore();
+  const { push } = useRouter();
   const { t } = useTranslation("common");
 
   async function connect() {
@@ -33,10 +35,11 @@ export default function Header() {
         </a>
         <div className="flex items-center">
           {address ? (
-            <>
+            <div className="flex items-center space-x-5">
               <ExplorerLink address={address} />
               <Button onClick={handleReset}>{t("wallet.disconnect_button")}</Button>
-            </>
+              <Button onClick={() => push(`/user/${address}`)}>{t("header.user_releases")}</Button>
+            </div>
           ) : (
             <Button onClick={connect}>{t("wallet.connect_button")}</Button>
           )}
