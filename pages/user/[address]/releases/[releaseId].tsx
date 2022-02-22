@@ -42,8 +42,8 @@ export default function DashboardPage() {
     }
   }, [query?.releaseId]);
 
-  if (status === "loading") return <div>Loading release....</div>;
-  if (status === "error") return <div>There was an error: {error?.message}</div>;
+  if (status === APIResponseStatus.LOADING) return <div>Loading release....</div>;
+  if (status === APIResponseStatus.ERROR) return <div>There was an error: {error?.message}</div>;
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
