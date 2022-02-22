@@ -1,5 +1,6 @@
 import { callContract, createContract } from "./contract";
 import { formatRevert } from "./error";
+import { fromWei } from "./formatting";
 import { buildMetadata, uploadToIPFS } from "./ipfs";
 import { addNetwork, BLOCK_EXPLORER_URL, NETWORK_ID } from "./network";
 import {
@@ -17,6 +18,7 @@ export {
   callContract,
   createContract,
   formatRevert,
+  fromWei,
   NETWORK_ID,
   dismissNotification,
   loadingNotification,
