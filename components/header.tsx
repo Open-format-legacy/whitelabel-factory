@@ -29,10 +29,15 @@ export default function Header() {
   return (
     <header className="w-full py-2 px-2">
       <div className="flex items-center justify-between">
-        <a href="/">
-          <h1 className="text-2xl font-bold text-white">{t("header.name")}</h1>
+        <div>
+          <a className="flex" href="/">
+            <h1 className=" text-5xl font-bold leading-none tracking-tighter text-white hover:text-pink-500">
+              {t("header.name")}
+            </h1>
+            <p className="text-sm font-bold">{t("header.product")}</p>
+          </a>
           <p className="font-bold text-pink-500">{t("header.tagline")}</p>
-        </a>
+        </div>
         <div className="flex items-center">
           {address ? (
             <div className="flex items-center space-x-5">

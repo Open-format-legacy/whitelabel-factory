@@ -1,10 +1,10 @@
 {
   "header": {
-    "name": "The Factory 🏭",
+    "name": "whitelabel.",
+    "product": "factory",
     "tagline": "Release your music as an NFT.",
     "user_releases": "My releases"
   },
-
   "wallet": {
     "connect_button": "Connect wallet",
     "disconnect_button": "Disconnect",
