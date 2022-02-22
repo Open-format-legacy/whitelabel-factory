@@ -10,7 +10,7 @@ export default function useRelease(address: string, refetchInterval = 0) {
       const { releases } = await request(
         endpoint,
         gql`
-				query {
+			query {
 					releases(where: {creator: "${address}"}, orderBy: createdAt, orderDirection: desc) {
 						id
 						name
