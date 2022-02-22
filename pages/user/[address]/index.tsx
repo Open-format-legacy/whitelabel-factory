@@ -27,8 +27,8 @@ export default function UserPage() {
     return <div>invalid address.</div>;
   }
 
-  if (status === "loading") return <div>Loading release....</div>;
-  if (status === "error") return <div>There was an error: {error?.message}</div>;
+  if (status === APIResponseStatus.LOADING) return <div>Loading release....</div>;
+  if (status === APIResponseStatus.ERROR) return <div>There was an error: {error?.message}</div>;
   if (!data.length)
     return (
       <div className="flex flex-col items-center justify-center">
