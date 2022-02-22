@@ -11,10 +11,6 @@ type Contracts = {
 
 type ContractName = "factory";
 
-type Stakeholder = {
-  address: string;
-  share: number;
-};
 type TrackData = {
   artist: string;
   track_name: string;
@@ -32,4 +28,51 @@ type TrackData = {
 type Attribute = {
   trait_type: string;
   value: string;
+};
+
+type Release = {
+  id: string;
+  name: string;
+  symbol: string;
+  creator: Owner;
+  maxSupply: string;
+  totalEarnings: string;
+  totalSold: string;
+  totalReleased: string;
+  salePrice: string;
+  createdAt: number;
+  royaltiesPercentage: string;
+  image: string;
+  description: string;
+  audio: string;
+  licence: string;
+  stakeholders: [Stakeholder];
+  payouts: [Payout];
+  owners: [Owner];
+};
+
+type Stakeholder = {
+  id: string;
+  share: string;
+  release: Release;
+};
+
+type Payout = {
+  id: string;
+  account: string;
+  amount: string;
+  release: Release;
+  createdAt: number;
+  transactionHash: string;
+};
+
+type Owner = {
+  id: string;
+  releases: [Release];
+};
+
+type OwnerReleases = {
+  id: string;
+  owner: Owner;
+  release: Release;
 };
