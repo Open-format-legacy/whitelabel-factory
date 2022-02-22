@@ -47,3 +47,7 @@ export function buildMetadata(
 
   return data;
 }
+
+export function transformURL(url: string) {
+  return url.replace("ipfs://", "https://ipfs.infura.io/ipfs/");
+}

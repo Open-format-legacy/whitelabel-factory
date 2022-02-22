@@ -80,9 +80,8 @@ const Home: NextPage = () => {
           dismissNotification(pendingTx);
           successNotification("Preparing your release...", "Infinity");
 
-          push(`/dashboard/${contract.address}`);
+          push(`/user/${address}/releases/${contract.address}`);
 
-          localStorage.setItem("release_address", contract.address);
           setLoading(false);
         } catch (e) {
           dismissNotification(awaitingTx);

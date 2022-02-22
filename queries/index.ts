@@ -1,3 +1,4 @@
+import useCreatorReleases from "./useCreatorReleases";
 import useRelease from "./useRelease";
 
-export { useRelease };
+export { useCreatorReleases, useRelease };

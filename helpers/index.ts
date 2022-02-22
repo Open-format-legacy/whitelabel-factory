@@ -1,6 +1,7 @@
 import { callContract, createContract } from "./contract";
 import { formatRevert } from "./error";
-import { buildMetadata, uploadToIPFS } from "./ipfs";
+import { fromWei } from "./formatting";
+import { buildMetadata, transformURL, uploadToIPFS } from "./ipfs";
 import { addNetwork, BLOCK_EXPLORER_URL, NETWORK_ID } from "./network";
 import {
   dismissNotification,
@@ -17,11 +18,13 @@ export {
   callContract,
   createContract,
   formatRevert,
+  fromWei,
   NETWORK_ID,
   dismissNotification,
   loadingNotification,
   successNotification,
   errorNotification,
+  transformURL,
   readyToTransact,
   uploadToIPFS
 };

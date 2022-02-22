@@ -10,36 +10,36 @@ export default function useRelease(address: string, refetchInterval = 0) {
       const { release } = await request(
         endpoint,
         gql`
-				query {
-					release(id: "${address}") {
+			query {
+				release(id: "${address}") {
+					id
+					name
+					symbol
+					totalSold
+					maxSupply
+					totalEarnings
+					totalReleased
+					royaltiesPercentage
+					salePrice
+					image
+					audio
+					description
+					licence
+					stakeholders {
 						id
-						name
-						symbol
-						totalSold
-						maxSupply
-						totalEarnings
-						totalReleased
-						royaltiesPercentage
-						salePrice
-						image
-						audio
-						description
-						licence
-						stakeholders {
-							id
-							share
-						}
-						payouts {
-							id
-							amount
-							createdAt
-							transactionHash
-						}
-						creator {
-							id
-						}
+						share
+					}
+					payouts {
+						id
+						amount
+						createdAt
+						transactionHash
+					}
+					creator {
+						id
 					}
 				}
+			}
 			`
       );
       return release;

@@ -4,56 +4,54 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import theFactory from "../../abis/theFactory.json";
-import { Button, ExplorerLink } from "../../components";
+import theFactory from "../../../../abis/theFactory.json";
+import { Button, ExplorerLink } from "../../../../components";
 import {
   dismissNotification,
   errorNotification,
   formatRevert,
   loadingNotification,
-  successNotification
-} from "../../helpers";
-import { useRelease } from "../../queries";
-import { useWalletStore } from "../../stores";
+  successNotification,
+  transformURL
+} from "../../../../helpers";
+import { useRelease } from "../../../../queries";
+import { useWalletStore } from "../../../../stores";
 
 export default function DashboardPage() {
   const { query, push } = useRouter();
-  const { wallet } = useWalletStore();
+  const { wallet, address: connectedAddress } = useWalletStore();
   const [refetchInterval, setRefetchInterval] = useState(0);
   const [address, setAddress] = useState<string>();
-  const { status, data, error } = useRelease(address?.toLowerCase(), refetchInterval);
+  const { data, error, isLoading } = useRelease(address?.toLowerCase(), refetchInterval);
 
   useEffect(() => {
     // @dev The subgraph can take a second to pick up on
     // the blockchain events. This functions polls until there is data.
-    if (query?.address && !data) {
+    if (query?.releaseId && !data) {
       setRefetchInterval(1000);
     } else {
       setRefetchInterval(0);
     }
-  }, [query?.address, data]);
+  }, [query?.releaseId, data]);
 
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    const storedAddress = localStorage.getItem("release_address");
-    if (storedAddress) {
-      setAddress(storedAddress);
-    } else if (query?.address) {
-      setAddress(query.address.toString());
+    if (query?.releaseId) {
+      setAddress(query.releaseId.toString());
     }
-  }, [query?.address]);
+  }, [query?.releaseId]);
 
-  if (status === "loading") return <div>Loading release....</div>;
-  if (status === "error") return <div>There was an error: {error?.message}</div>;
+  if (isLoading) return <div>Loading release....</div>;
+  if (error) return <div>There was an error: {error?.message}</div>;
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
-      push(`/dashboard/${data.release_address}`);
+      push(`/user/${connectedAddress}/${data.release_address}`);
     }
   }
 
-  if (!query.address && !localStorage.getItem("release_address"))
+  if (!query.releaseId)
     return (
       <form
         className="flex flex-col items-center justify-center"
@@ -72,14 +70,12 @@ export default function DashboardPage() {
     );
 
   async function releaseFundsToStakeholder(address: string) {
-    console.log({ address });
-    if (wallet.provider && query.address) {
+    if (wallet.provider && query.releaseId) {
       try {
-        console.log(query.address.toString());
         const provider = new ethers.providers.Web3Provider(wallet.provider);
         const signer = provider.getSigner();
-        const contract = new ethers.Contract(query.address.toString(), theFactory.abi, signer);
-        console.log({ contract });
+        const contract = new ethers.Contract(query.releaseId.toString(), theFactory.abi, signer);
+
         const tx = await contract["release(address)"](address);
         const pendingTx = loadingNotification("Pending transaction...", 30000);
         await tx.wait();
@@ -222,10 +218,6 @@ export default function DashboardPage() {
       </div>
     );
   } else {
-    return <div></div>;
+    return null;
   }
-}
-
-function transformURL(url: string) {
-  return url.replace("ipfs://", "https://ipfs.infura.io/ipfs/");
 }
