@@ -1,8 +1,3 @@
-enum APIResponseStatus {
-  LOADING = "loading",
-  ERROR = "error"
-}
-
 type Wallet = {
   provider: ethers.providers.ExternalProvider;
 };

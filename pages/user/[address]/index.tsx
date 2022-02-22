@@ -14,7 +14,7 @@ export default function UserPage() {
   const { query, push } = useRouter();
   const { address } = useWalletStore();
   const { t } = useTranslation("common");
-  const { status, data, error } = useCreatorReleases(query?.address.toString());
+  const { isLoading, data, error } = useCreatorReleases(query?.address.toString());
   const isValidAddress = ethers.utils.isAddress(query?.address.toString());
 
   useEffect(() => {
@@ -27,8 +27,8 @@ export default function UserPage() {
     return <div>invalid address.</div>;
   }
 
-  if (status === APIResponseStatus.LOADING) return <div>Loading release....</div>;
-  if (status === APIResponseStatus.ERROR) return <div>There was an error: {error?.message}</div>;
+  if (isLoading) return <div>Loading release....</div>;
+  if (error) return <div>There was an error: {error?.message}</div>;
   if (!data.length)
     return (
       <div className="flex flex-col items-center justify-center">

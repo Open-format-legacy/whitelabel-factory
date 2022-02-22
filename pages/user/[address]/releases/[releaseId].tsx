@@ -22,7 +22,7 @@ export default function DashboardPage() {
   const { wallet, address: connectedAddress } = useWalletStore();
   const [refetchInterval, setRefetchInterval] = useState(0);
   const [address, setAddress] = useState<string>();
-  const { status, data, error } = useRelease(address?.toLowerCase(), refetchInterval);
+  const { data, error, isLoading } = useRelease(address?.toLowerCase(), refetchInterval);
 
   useEffect(() => {
     // @dev The subgraph can take a second to pick up on
@@ -42,8 +42,8 @@ export default function DashboardPage() {
     }
   }, [query?.releaseId]);
 
-  if (status === APIResponseStatus.LOADING) return <div>Loading release....</div>;
-  if (status === APIResponseStatus.ERROR) return <div>There was an error: {error?.message}</div>;
+  if (isLoading) return <div>Loading release....</div>;
+  if (error) return <div>There was an error: {error?.message}</div>;
 
   function handleAddressSubmit(data) {
     if (data.release_address && ethers.utils.isAddress(data.release_address)) {
