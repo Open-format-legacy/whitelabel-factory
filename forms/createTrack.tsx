@@ -37,11 +37,11 @@ export default function CreateReleaseForm({
     track_name: yup.string().required(),
     track_description: yup.string().required(),
     symbol: yup.string().required(),
-    salePrice: yup.number().required(),
-    quantity: yup.number().required(),
+    salePrice: yup.number().required().typeError("Sale price is required"),
+    quantity: yup.number().required().typeError("quantity price is required"),
     royalitiesPercentage: showRoyalties
-      ? yup.number().required().min(1).max(10000)
-      : yup.number().nullable(),
+      ? yup.number().required().min(0).max(10000).typeError("Royalties must between 0 - 10000")
+      : yup.number().nullable().typeError("Royalties must between 0 - 10000"),
     stakeholders: showStakeholders
       ? yup
           .array()
@@ -59,15 +59,7 @@ export default function CreateReleaseForm({
   });
 
   const form = useForm<TrackData>({
-    resolver: yupResolver(ReleaseSchema),
-    defaultValues: {
-      artist: "ART",
-      track_description: "My latest track",
-      track_name: "Big",
-      symbol: "TOON",
-      salePrice: 1,
-      quantity: 500
-    }
+    resolver: yupResolver(ReleaseSchema)
   });
 
   const { remove, fields, append } = useFieldArray({
@@ -106,6 +98,7 @@ export default function CreateReleaseForm({
                 name="artist"
                 label="Artist Name"
                 helpText="Add the name of the artist or band."
+                placeholder="The Clash"
                 error={errors.artist?.message}
               />
             </Field>
@@ -117,6 +110,7 @@ export default function CreateReleaseForm({
               <Input
                 name="track_name"
                 label="Track Name"
+                placeholder="Bankrobber"
                 helpText="Add the name of the track."
                 error={errors.track_name?.message}
               />
@@ -130,6 +124,7 @@ export default function CreateReleaseForm({
                 name="symbol"
                 label="Blockchain Track Indentifier"
                 helpText="e.g. TOON, MIX, SONG"
+                placeholder="BANK"
                 error={errors.symbol?.message}
                 maxLength={4}
               />
@@ -142,6 +137,7 @@ export default function CreateReleaseForm({
               <TextArea
                 name="track_description"
                 label="Track Description"
+                placeholder="My daddy was a bank robber, but he never hurt nobody..."
                 error={errors.track_description?.message}
               />
             </Field>
@@ -159,6 +155,7 @@ export default function CreateReleaseForm({
               label="Quantity"
               error={errors.quantity?.message}
               trailing={symbolValue}
+              placeholder="1000"
             />
           </Field>
           <Field
@@ -170,6 +167,7 @@ export default function CreateReleaseForm({
               name="salePrice"
               label="Sale Price"
               error={errors.salePrice?.message}
+              placeholder="0.5"
               trailing="MATIC"
             />
           </Field>
