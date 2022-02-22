@@ -11,7 +11,8 @@ import {
   errorNotification,
   formatRevert,
   loadingNotification,
-  successNotification
+  successNotification,
+  transformURL
 } from "../../helpers";
 import { useRelease } from "../../queries";
 import { useWalletStore } from "../../stores";
@@ -224,8 +225,4 @@ export default function DashboardPage() {
   } else {
     return <div></div>;
   }
-}
-
-function transformURL(url: string) {
-  return url.replace("ipfs://", "https://ipfs.infura.io/ipfs/");
 }
