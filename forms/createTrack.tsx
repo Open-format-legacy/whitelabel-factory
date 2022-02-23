@@ -21,6 +21,7 @@ export default function CreateReleaseForm({
   const { address } = useWalletStore();
   const [showRoyalties, setShowRoyalties] = useState<boolean>(false);
   const [showStakeholders, setShowStakeholders] = useState<boolean>(false);
+  const [GBPPrice, setGBPPrice] = useState<number>(0);
 
   const emailRequired = t("email.required");
   const emailValid = t("email.valid");
@@ -74,6 +75,10 @@ export default function CreateReleaseForm({
   } = form;
 
   useEffect(() => {
+    fetch("https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=gbp")
+      .then((res) => res.json())
+      .then((res) => setGBPPrice(res["matic-network"].gbp));
+
     if (address) {
       reset({
         stakeholders: [{ address, share: 100 }],
@@ -83,6 +88,11 @@ export default function CreateReleaseForm({
   }, [address]);
 
   const symbolValue = watch("symbol");
+  const salePriceValue = watch("salePrice");
+
+  const currencyConversion = Boolean(salePriceValue && GBPPrice)
+    ? `(£${(salePriceValue * GBPPrice).toFixed(2)})`
+    : "(£0.00)";
 
   return (
     <FormProvider {...form}>
@@ -160,15 +170,16 @@ export default function CreateReleaseForm({
           </Field>
           <Field
             className="col-span-6 lg:col-span-3"
-            helpText="How much does each release cost."
+            helpText="How much does each release cost in MATIC."
             error={errors.salePrice?.message}
           >
             <Input
               name="salePrice"
+              type="number"
               label="Sale Price"
               error={errors.salePrice?.message}
               placeholder="0.5"
-              trailing="MATIC"
+              trailing={`MATIC ${currencyConversion}`}
             />
           </Field>
           <Field className="col-span-6 lg:col-span-3">
