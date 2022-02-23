@@ -21,7 +21,7 @@ export default function CreateReleaseForm({
   const { address } = useWalletStore();
   const [showRoyalties, setShowRoyalties] = useState<boolean>(false);
   const [showStakeholders, setShowStakeholders] = useState<boolean>(false);
-  const [dollarPrice, setDollarPrice] = useState<number>(0);
+  const [GBPPrice, setGBPPrice] = useState<number>(0);
 
   const emailRequired = t("email.required");
   const emailValid = t("email.valid");
@@ -77,7 +77,7 @@ export default function CreateReleaseForm({
   useEffect(() => {
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=gbp")
       .then((res) => res.json())
-      .then((res) => setDollarPrice(res["matic-network"].gbp));
+      .then((res) => setGBPPrice(res["matic-network"].gbp));
 
     if (address) {
       reset({
@@ -90,8 +90,8 @@ export default function CreateReleaseForm({
   const symbolValue = watch("symbol");
   const salePriceValue = watch("salePrice");
 
-  const currencyConversion = Boolean(salePriceValue && dollarPrice)
-    ? `(£${(salePriceValue * dollarPrice).toFixed(2)})`
+  const currencyConversion = Boolean(salePriceValue && GBPPrice)
+    ? `(£${(salePriceValue * GBPPrice).toFixed(2)})`
     : "(£0.00)";
 
   return (
