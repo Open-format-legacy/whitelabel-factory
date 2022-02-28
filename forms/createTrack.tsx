@@ -190,7 +190,7 @@ export default function CreateReleaseForm({
                 <div key={index} className="col-span-6 grid grid-cols-6 gap-6">
                   <Field
                     className="col-span-2"
-                    helpText="Add the ethereum address of the stakeholder."
+                    helpText="Select an attribute type."
                     error={errors["attributes"]?.[index]?.trait_type?.message}
                   >
                     <Select label="Attribute Type" name={`attributes.${index}.trait_type`}>
