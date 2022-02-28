@@ -72,7 +72,7 @@ const Home: NextPage = () => {
               name,
               symbol,
               quantity,
-              royalitiesPercentage,
+              royalitiesPercentage ? (royalitiesPercentage * 100).toFixed(2) : 0,
               ipfsData.url
             );
 

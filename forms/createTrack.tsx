@@ -41,8 +41,8 @@ export default function CreateReleaseForm({
     salePrice: yup.number().required().typeError("Sale price is required"),
     quantity: yup.number().required().typeError("quantity price is required"),
     royalitiesPercentage: showRoyalties
-      ? yup.number().required().min(0).max(10000).typeError("Royalties must between 0 - 10000")
-      : yup.number().nullable().typeError("Royalties must between 0 - 10000"),
+      ? yup.number().required().min(0).max(100).typeError("Royalties must between 0 - 100%")
+      : yup.number().nullable().typeError("Royalties must between 0 - 100%"),
     stakeholders: showStakeholders
       ? yup
           .array()
@@ -81,8 +81,7 @@ export default function CreateReleaseForm({
 
     if (address) {
       reset({
-        stakeholders: [{ address, share: 100 }],
-        royalitiesPercentage: 0
+        stakeholders: [{ address, share: 100 }]
       });
     }
   }, [address]);
@@ -200,10 +199,11 @@ export default function CreateReleaseForm({
             <div className="my-5 grid grid-cols-6 gap-6">
               <Field
                 className="col-span-6 lg:col-span-3"
-                helpText="Choose a number between 0 - 10000. e.g 250 = 2.5%."
+                helpText="Choose a number between 0 - 100%"
                 error={errors.royalitiesPercentage?.message}
               >
                 <Input
+                  type="number"
                   name="royalitiesPercentage"
                   label="Royalty Percentage"
                   trailing="%"
