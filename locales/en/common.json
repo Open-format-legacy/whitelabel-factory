@@ -12,11 +12,15 @@
   },
   "royalties": {
     "title": "Royalties",
-    "description": "Here you can set the royalty percentage you receive as an artist on every secondary sale"
+    "description": "Here you can set a royalty percentage for every secondary sale."
   },
   "stakeholders": {
-    "title": "Stakeholders",
-    "description": "Add stakeholders to your release. You can allocate 100 shares between multiple stakeholders. Each share equates to 1% of every primary sale of your release. "
+    "title": "Splits",
+    "description": "You can split any earnings between multiple wallets. You can allocate a maximum of 100 shares. Each share equates to 1% of all earnings for this release.",
+    "add": "Add Split",
+    "remove": "Remove Split",
+    "toggle": "Add splits",
+    "helpText": "Add an ethereum address."
   },
   "user": {
     "no_releases": "No releases found",

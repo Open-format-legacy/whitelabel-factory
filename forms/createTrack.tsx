@@ -277,7 +277,7 @@ export default function CreateReleaseForm({
             <Toggle
               enabled={showStakeholders}
               setEnabled={setShowStakeholders}
-              label="Add stakeholders"
+              label={t("stakeholders.toggle")}
             />
           </Field>
         </div>
@@ -312,7 +312,7 @@ export default function CreateReleaseForm({
                   <div key={index} className="col-span-6 grid grid-cols-6 gap-6">
                     <Field
                       className="col-span-6 lg:col-span-4"
-                      helpText="Add the ethereum address of the stakeholder."
+                      helpText={t("stakeholders.helpText")}
                       error={errors["stakeholders"]?.[index]?.address?.message}
                     >
                       <Input label="Address" name={`stakeholders.${index}.address`} />
@@ -347,7 +347,7 @@ export default function CreateReleaseForm({
                     });
                   }}
                 >
-                  Add stakeholder
+                  {t("stakeholders.add")}
                 </Button>
               </Field>
             </div>
