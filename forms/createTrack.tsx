@@ -66,16 +66,17 @@ export default function CreateReleaseForm({
   });
 
   const form = useForm<TrackData>({
-    resolver: yupResolver(ReleaseSchema),
-    defaultValues: {
-      artist: "Bob",
-      track_name: "Builder",
-      track_description: "Can you fix it?",
-      symbol: "BOB",
-      salePrice: 0.002,
-      quantity: 123,
-      royalitiesPercentage: 100
-    }
+    resolver: yupResolver(ReleaseSchema)
+    // @dev Used for testing
+    // defaultValues: {
+    //   artist: "Bob",
+    //   track_name: "Builder",
+    //   track_description: "Can you fix it?",
+    //   symbol: "BOB",
+    //   salePrice: 0.002,
+    //   quantity: 123,
+    //   royalitiesPercentage: 100
+    // }
   });
 
   const {
