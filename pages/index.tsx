@@ -28,6 +28,7 @@ const Home: NextPage = () => {
     const loading = loadingNotification("Uploading files to IPFS...");
 
     const {
+      attributes,
       artist,
       track_name,
       track_description,
@@ -46,7 +47,7 @@ const Home: NextPage = () => {
       track_description,
       image,
       audio,
-      null,
+      attributes,
       licence,
       documents
     );
