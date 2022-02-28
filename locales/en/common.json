@@ -28,6 +28,6 @@
   },
   "attributes": {
     "title": "Attributes",
-    "description": "Add attributes to your release. This will help users find your release in the market."
+    "description": "Add attributes to your release. This will help users find your release in the market. These values can't be updated so check your spelling!"
   }
 }
