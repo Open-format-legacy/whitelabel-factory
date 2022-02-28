@@ -21,5 +21,9 @@
   "user": {
     "no_releases": "No releases found",
     "preparing_release": "Preparing your release..."
+  },
+  "attributes": {
+    "title": "Attributes",
+    "description": "Add attributes to your release. This will help users find your release in the market."
   }
 }
