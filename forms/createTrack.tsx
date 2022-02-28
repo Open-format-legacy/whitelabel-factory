@@ -29,8 +29,8 @@ export default function CreateReleaseForm({
   const passwordMinLength = t("password.minLength");
 
   const StakeholderSchema = {
-    address: yup.string().required(),
-    share: yup.number().required()
+    address: yup.string().required("Address is required"),
+    share: yup.number().required("Share is required").typeError("Share must be a number")
   };
 
   const ReleaseSchema = yup.object().shape({
@@ -63,7 +63,11 @@ export default function CreateReleaseForm({
     resolver: yupResolver(ReleaseSchema)
   });
 
-  const { remove, fields, append } = useFieldArray({
+  const {
+    remove: removeStakeholder,
+    fields: stakeholderFields,
+    append: appendStakeholder
+  } = useFieldArray({
     control: form.control,
     name: "stakeholders"
   });
@@ -218,28 +222,24 @@ export default function CreateReleaseForm({
             <h1>{t("stakeholders.title")}</h1>
             <p className="text-sm font-semibold">{t("stakeholders.description")}</p>
             <div className="my-5 grid grid-cols-6 gap-6">
-              {fields.map((item, index) => {
+              {stakeholderFields.map((item, index) => {
                 return (
                   <div key={index} className="col-span-6 grid grid-cols-6 gap-6">
                     <Field
                       className="col-span-6 lg:col-span-4"
                       helpText="Add the ethereum address of the stakeholder."
+                      error={errors["stakeholders"]?.[index]?.address?.message}
                     >
-                      <Input
-                        label="Address"
-                        name={`stakeholders.${index}.address`}
-                        error={errors.stakeholders?.message}
-                      />
+                      <Input label="Address" name={`stakeholders.${index}.address`} />
                     </Field>
                     <div className="col-span-6 flex lg:col-span-2">
-                      <Field helpText="Add the percentage of the shares.">
-                        <Input
-                          label="Shares"
-                          name={`stakeholders.${index}.share`}
-                          error={errors.stakeholders?.message}
-                        />
+                      <Field
+                        helpText="Add the percentage of the shares."
+                        error={errors["stakeholders"]?.[index]?.share?.message}
+                      >
+                        <Input type="number" label="Shares" name={`stakeholders.${index}.share`} />
                       </Field>
-                      <div className="mx-5 pt-8" onClick={() => remove(index)}>
+                      <div className="mx-5 pt-8" onClick={() => removeStakeholder(index)}>
                         <MinusCircleIcon className="h-6 w-6" />
                       </div>
                     </div>
@@ -247,7 +247,7 @@ export default function CreateReleaseForm({
                 );
               })}
               <Field className="col-span-6">
-                {errors?.stakeholders && (
+                {errors?.stakeholders?.message && (
                   <p className="rounded-md bg-red-500 p-2 text-xs font-semibold">
                     {errors.stakeholders.message}
                   </p>
@@ -256,7 +256,7 @@ export default function CreateReleaseForm({
               <Field className="col-span-6">
                 <Button
                   onClick={() => {
-                    append({
+                    appendStakeholder({
                       address: "",
                       share: undefined
                     });
