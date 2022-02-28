@@ -204,7 +204,7 @@ export default function CreateReleaseForm({
                       <option value="drum-machine">Drum Machine</option>
                       <option value="fx">FX</option>
                       <option value="daw">DAW</option>
-                      <option value="bass">Bass</option>
+                      <option value="synth">Synth</option>
                     </Select>
                   </Field>
                   <div className="col-span-3">
