@@ -248,7 +248,9 @@ export default function CreateReleaseForm({
               })}
               <Field className="col-span-6">
                 {errors?.stakeholders && (
-                  <p className="text-sm font-semibold text-black">{errors.stakeholders.message}</p>
+                  <p className="rounded-md bg-red-500 p-2 text-xs font-semibold">
+                    {errors.stakeholders.message}
+                  </p>
                 )}
               </Field>
               <Field className="col-span-6">
@@ -267,11 +269,7 @@ export default function CreateReleaseForm({
           </div>
         )}
         <Field className="my-5">
-          {!isLoading && (
-            <Button isLoading={isLoading} disabled={!requiredFilesAdded}>
-              Create Track
-            </Button>
-          )}
+          {!isLoading && <Button isLoading={isLoading}>Create Track</Button>}
           {!requiredFilesAdded && (
             <p className="mt-2 text-sm">You're missing an audio file and track artwork.</p>
           )}

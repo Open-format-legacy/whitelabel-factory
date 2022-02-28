@@ -13,8 +13,8 @@ export default function Field({ children, className, error, helpText }: FieldPro
 
       <p
         className={classNames(
-          error ? "text-black" : "text-black-500",
-          "mt-2 text-sm font-semibold"
+          error ? "bg-red-500  text-white shadow" : "text-black-500 ",
+          "mt-2 rounded-md p-2 text-xs font-semibold"
         )}
       >
         {error ?? helpText}
