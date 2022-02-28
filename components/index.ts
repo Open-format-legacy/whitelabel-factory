@@ -1,3 +1,4 @@
+import Banner from "./banner";
 import Button from "./button";
 import ExplorerLink from "./explorerLink";
 import Field from "./field";
@@ -7,4 +8,4 @@ import Input from "./input";
 import TextArea from "./textarea";
 import Toggle from "./toggle";
 
-export { Button, ExplorerLink, Header, Field, FileUpload, Input, TextArea, Toggle };
+export { Banner, Button, ExplorerLink, Header, Field, FileUpload, Input, TextArea, Toggle };

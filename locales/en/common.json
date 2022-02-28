@@ -21,5 +21,9 @@
   "user": {
     "no_releases": "No releases found",
     "preparing_release": "Preparing your release..."
+  },
+  "banner": {
+    "text": "This is an open source project. ",
+    "link": "read the docs"
   }
 }
