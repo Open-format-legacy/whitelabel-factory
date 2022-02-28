@@ -199,11 +199,11 @@ export default function CreateReleaseForm({
                       </option>
                       <option value="genre">Genre</option>
                       <option value="bpm">BPM</option>
-                      <option value="bpm">Key</option>
-                      <option value="bpm">Drum Machine</option>
-                      <option value="bpm">FX</option>
-                      <option value="bpm">DAW</option>
-                      <option value="bpm">Bass</option>
+                      <option value="key">Key</option>
+                      <option value="drum-machine">Drum Machine</option>
+                      <option value="fx">FX</option>
+                      <option value="daw">DAW</option>
+                      <option value="bass">Bass</option>
                     </Select>
                   </Field>
                   <div className="col-span-3">
