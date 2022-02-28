@@ -29,6 +29,7 @@ export function buildMetadata(
     audio: new File([audio], audio.name, {
       type: audio.type
     }),
+    release_type: "audio",
     ...(attributes &&
       attributes.length && {
         attributes: attributes.map((attribute) => ({
