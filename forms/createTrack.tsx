@@ -4,7 +4,7 @@ import useTranslation from "next-translate/useTranslation";
 import { useEffect, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import * as yup from "yup";
-import { Button, Field, Input, TextArea, Toggle } from "../components";
+import { Button, Field, Input, Select, TextArea, Toggle } from "../components";
 import { useWalletStore } from "../stores";
 
 interface CreateReleaseFormProps {
@@ -33,6 +33,11 @@ export default function CreateReleaseForm({
     share: yup.number().required("Share is required").typeError("Share must be a number")
   };
 
+  const AttributeSchema = {
+    trait_type: yup.string().required("Trait type is required"),
+    value: yup.string().required("value is required")
+  };
+
   const ReleaseSchema = yup.object().shape({
     artist: yup.string().required(),
     track_name: yup.string().required(),
@@ -43,6 +48,7 @@ export default function CreateReleaseForm({
     royalitiesPercentage: showRoyalties
       ? yup.number().required().min(0).max(100).typeError("Royalties must between 0 - 100%")
       : yup.number().nullable().typeError("Royalties must between 0 - 100%"),
+    attributes: yup.array().of(yup.object().shape(AttributeSchema)),
     stakeholders: showStakeholders
       ? yup
           .array()
@@ -60,7 +66,16 @@ export default function CreateReleaseForm({
   });
 
   const form = useForm<TrackData>({
-    resolver: yupResolver(ReleaseSchema)
+    resolver: yupResolver(ReleaseSchema),
+    defaultValues: {
+      artist: "Bob",
+      track_name: "Builder",
+      track_description: "Can you fix it?",
+      symbol: "BOB",
+      salePrice: 0.002,
+      quantity: 123,
+      royalitiesPercentage: 100
+    }
   });
 
   const {
@@ -70,6 +85,15 @@ export default function CreateReleaseForm({
   } = useFieldArray({
     control: form.control,
     name: "stakeholders"
+  });
+
+  const {
+    remove: removeAttribute,
+    fields: attributeFields,
+    append: appendAttribute
+  } = useFieldArray({
+    control: form.control,
+    name: "attributes"
   });
 
   const {
@@ -85,7 +109,8 @@ export default function CreateReleaseForm({
 
     if (address) {
       reset({
-        stakeholders: [{ address, share: 100 }]
+        stakeholders: [{ address, share: 100 }],
+        attributes: [{ trait_type: "genre", value: "" }]
       });
     }
   }, [address]);
@@ -153,6 +178,65 @@ export default function CreateReleaseForm({
                 placeholder="My daddy was a bank robber, but he never hurt nobody..."
                 error={errors.track_description?.message}
               />
+            </Field>
+          </div>
+        </div>
+        <div className="gradient-primary my-5 rounded-md p-5">
+          <h1>{t("attributes.title")}</h1>
+          <p className="text-sm font-semibold">{t("attributes.description")}</p>
+          <div className="my-5 grid grid-cols-6 gap-6">
+            {attributeFields.map((item, index) => {
+              return (
+                <div key={index} className="col-span-6 grid grid-cols-6 gap-6">
+                  <Field
+                    className="col-span-2"
+                    helpText="Add the ethereum address of the stakeholder."
+                    error={errors["attributes"]?.[index]?.trait_type?.message}
+                  >
+                    <Select label="Attribute Type" name={`attributes.${index}.trait_type`}>
+                      <option disabled selected value="">
+                        Select Attribute Type
+                      </option>
+                      <option value="genre">Genre</option>
+                      <option value="bpm">BPM</option>
+                      <option value="bpm">Key</option>
+                      <option value="bpm">Drum Machine</option>
+                      <option value="bpm">FX</option>
+                      <option value="bpm">DAW</option>
+                      <option value="bpm">Bass</option>
+                    </Select>
+                  </Field>
+                  <div className="col-span-3">
+                    <Field
+                      helpText="Add value for this attribute."
+                      error={errors["attributes"]?.[index]?.value?.message}
+                    >
+                      <Input label="Attribute Value" name={`attributes.${index}.value`} />
+                    </Field>
+                  </div>
+                  <div className="mx-5 pt-8" onClick={() => removeAttribute(index)}>
+                    <MinusCircleIcon className="h-6 w-6" />
+                  </div>
+                </div>
+              );
+            })}
+            <Field className="col-span-6">
+              {errors?.attributes?.message && (
+                <p className="rounded-md bg-red-500 p-2 text-xs font-semibold">
+                  {errors.attributes.message}
+                </p>
+              )}
+            </Field>
+            <Field className="col-span-6">
+              <Button
+                onClick={() => {
+                  appendAttribute({
+                    address: ""
+                  });
+                }}
+              >
+                Add Attribute
+              </Button>
             </Field>
           </div>
         </div>
@@ -269,7 +353,11 @@ export default function CreateReleaseForm({
           </div>
         )}
         <Field className="my-5">
-          {!isLoading && <Button isLoading={isLoading}>Create Track</Button>}
+          {!isLoading && (
+            <Button isLoading={isLoading} disabled={!requiredFilesAdded}>
+              Create Track
+            </Button>
+          )}
           {!requiredFilesAdded && (
             <p className="mt-2 text-sm">You're missing an audio file and track artwork.</p>
           )}
