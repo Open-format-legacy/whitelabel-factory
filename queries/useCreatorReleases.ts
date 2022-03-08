@@ -7,25 +7,26 @@ export default function useRelease(address: string, refetchInterval = 0) {
   return useQuery(
     ["creatorReleases", address],
     async () => {
-      const { releases } = await request(
+      const { mediaItems } = await request(
         endpoint,
         gql`
 			query {
-					releases(where: {creator: "${address}"}, orderBy: createdAt, orderDirection: desc) {
-						id
-						name
+					mediaItems(where: {creator: "${address}"}, orderBy: createdAt, orderDirection: desc) {
+						id				
 						symbol
-						totalSold
-						maxSupply
-						totalEarnings
-						totalReleased
-						royaltiesPercentage
-						salePrice
-						image
-						audio
 						createdAt
-						description
-						licence
+						saleData {
+							totalSold
+							maxSupply
+							totalEarnings
+							totalReleased
+							royaltiesPercentage
+							salePrice
+						}
+						metadata {
+							key
+							value
+						}
 						stakeholders {
 							id
 							share
@@ -36,14 +37,11 @@ export default function useRelease(address: string, refetchInterval = 0) {
 							createdAt
 							transactionHash
 						}
-						artist {
-							name
-						}
 					}
 				}
 			`
       );
-      return releases;
+      return mediaItems;
     },
     { refetchInterval }
   );

@@ -7,24 +7,13 @@ export default function useRelease(address: string, refetchInterval = 0) {
   return useQuery(
     ["release", address],
     async () => {
-      const { release } = await request(
+      const { mediaItem } = await request(
         endpoint,
         gql`
 			query {
-				release(id: "${address}") {
+				mediaItem(id: "${address}") {
 					id
-					name
 					symbol
-					totalSold
-					maxSupply
-					totalEarnings
-					totalReleased
-					royaltiesPercentage
-					salePrice
-					image
-					audio
-					description
-					licence
 					stakeholders {
 						id
 						share
@@ -35,14 +24,23 @@ export default function useRelease(address: string, refetchInterval = 0) {
 						createdAt
 						transactionHash
 					}
-					creator {
-						id
+					metadata {
+						key
+						value
+					}
+					saleData {
+						totalSold
+						maxSupply
+						totalEarnings
+						totalReleased
+						royaltiesPercentage
+						salePrice
 					}
 				}
 			}
 			`
       );
-      return release;
+      return mediaItem;
     },
     { refetchInterval }
   );
