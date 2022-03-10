@@ -52,9 +52,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [onboard]);
 
+  const hideBanner = Boolean(process.env.NEXT_PUBLIC_HIDE_BANNER === "true");
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Banner />
+      {!hideBanner && <Banner />}
       <div className="h-full min-h-screen bg-zinc-900 p-2 md:p-4">
         <Header />
         <Component {...pageProps} />
