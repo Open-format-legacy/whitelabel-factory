@@ -27,6 +27,10 @@
     "no_releases": "No releases found",
     "preparing_release": "Preparing your release..."
   },
+  "banner": {
+    "text": "This is an open source project. ",
+    "link": "read the docs"
+  },
   "attributes": {
     "title": "Attributes",
     "description": "Add attributes to your release. This will help users find your release in the market. These values can't be updated so check your spelling!"

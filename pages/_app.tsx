@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Header } from "../components";
+import { Banner, Header } from "../components";
 import { addNetwork, NETWORK_ID, readyToTransact } from "../helpers";
 import { initOnboard } from "../services";
 import { useWalletStore } from "../stores";
@@ -52,8 +52,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [onboard]);
 
+  const hideBanner = Boolean(process.env.NEXT_PUBLIC_HIDE_BANNER === "true");
+
   return (
     <QueryClientProvider client={queryClient}>
+      {!hideBanner && <Banner />}
       <div className="h-full min-h-screen bg-zinc-900 p-2 md:p-4">
         <Header />
         <Component {...pageProps} />
