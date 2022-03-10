@@ -3,50 +3,21 @@ type Wallet = {
 };
 
 type Contracts = {
-  factory: {
-    bytecode: ethers.ContractBytecode;
+  nft: {
+    address: string;
     abi: ethers.ContractInterface;
   };
 };
 
-type ContractName = "factory";
-
-type TrackData = {
-  artist: string;
-  track_name: string;
-  track_description: string;
-  symbol: string;
-  stakeholders: Stakeholder[];
-  royalitiesPercentage: number;
-  salePrice: number;
-  quantity: number;
-  attributes: Attribute[];
-  license: string;
-  documents: string[];
-};
-
-type Attribute = {
-  trait_type: string;
-  value: string;
-};
+type ContractName = "nft";
 
 type Release = {
   id: string;
-  name: string;
   symbol: string;
-  creator: string;
-  artist: Artist;
-  maxSupply: string;
-  totalEarnings: string;
-  totalSold: string;
-  totalReleased: string;
-  salePrice: string;
+  creator: Owner;
   createdAt: number;
-  royaltiesPercentage: string;
-  image: string;
-  description: string;
-  audio: string;
-  licence: string;
+  metadata: Metadata[];
+  saleData: SaleData;
   stakeholders: [Stakeholder];
   payouts: [Payout];
   owners: [Owner];
@@ -55,30 +26,40 @@ type Release = {
 type Stakeholder = {
   id: string;
   share: string;
-  release: Release;
+  mediaItem: Release;
 };
 
 type Payout = {
   id: string;
   account: string;
   amount: string;
-  release: Release;
+  mediaItem: Release;
   createdAt: number;
   transactionHash: string;
 };
 
 type Owner = {
   id: string;
-  releases: [Release];
+  mediaItems: [Release];
 };
 
 type OwnerReleases = {
   id: string;
   owner: Owner;
-  release: Release;
+  mediaItem: Release;
 };
 
-type Artist = {
-  id: string;
-  name: string;
+type Metadata = {
+  key: string;
+  value: string;
+};
+
+type SaleData = {
+  maxSupply: number;
+  totalEarnings: number;
+  totalSold: number;
+  totalReleased: number;
+  salePrice: number;
+  createdAt: number;
+  royaltiesPercentage: number;
 };

@@ -11,6 +11,7 @@ import {
   dismissNotification,
   errorNotification,
   formatRevert,
+  getMetadataValue,
   loadingNotification,
   successNotification,
   transformURL
@@ -84,7 +85,7 @@ export default function DashboardPage() {
         dismissNotification(pendingTx);
         successNotification("Funds released");
       } catch (e: any) {
-        errorNotification(formatRevert(e.data.message));
+        errorNotification(formatRevert(e?.message));
       }
     }
   }
@@ -98,10 +99,13 @@ export default function DashboardPage() {
   }
 
   function MetadataCard() {
+    const name = getMetadataValue(data.metadata, "name");
+    const description = getMetadataValue(data.metadata, "description");
+
     const items = [
-      { title: "Track Name", value: data.name },
+      { title: "Track Name", value: name },
       { title: "Track Symbol", value: data.symbol },
-      { title: "Track Description", value: data.description }
+      { title: "Track Description", value: description }
     ];
     return (
       <li className="gradient-primary flex justify-center rounded-lg py-10 shadow">
@@ -126,12 +130,14 @@ export default function DashboardPage() {
   }
 
   function MediaCard() {
+    const image = getMetadataValue(data.metadata, "image");
+    const audio = getMetadataValue(data.metadata, "audio");
     return (
       <li className="flex justify-center rounded-lg">
         <div className="flex flex-col items-center justify-center space-y-2">
-          <img loading="lazy" className="rounded-lg" src={transformURL(data.image)} />
+          <img loading="lazy" className="rounded-lg" src={transformURL(image)} />
           <audio className="w-full" id="audio" controls>
-            <source src={transformURL(data.audio)} id="src" />
+            <source src={transformURL(audio)} id="src" />
           </audio>
         </div>
       </li>
@@ -155,38 +161,31 @@ export default function DashboardPage() {
   if (data) {
     dismissNotification();
 
-    const {
-      symbol,
-      totalSold,
-      maxSupply,
-      totalEarnings,
-      salePrice,
-      royaltiesPercentage,
-      stakeholders,
-      payouts
-    } = data;
+    const { symbol, stakeholders, payouts, saleData } = data;
 
     return (
       <div className="grid lg:grid-cols-5">
         <div className="grid grid-rows-3 gap-5 lg:col-span-3 lg:grid-cols-3 lg:grid-rows-none">
           <StatsCard>
             <p>Total Sold</p>
-            <p className="text-5xl font-semibold">{`${totalSold}/${maxSupply}`}</p>
+            <p className="text-5xl font-semibold">{`${saleData.totalSold}/${saleData.maxSupply}`}</p>
             {symbol && <p className="text-sm font-semibold text-black">{symbol}</p>}
           </StatsCard>
           <StatsCard>
             <p>Total Earnings</p>
-            <p className="text-5xl font-semibold">{fromWei(totalEarnings)}</p>
+            <p className="text-5xl font-semibold">{fromWei(saleData.totalEarnings)}</p>
             {symbol && <p className="text-sm font-semibold text-black">MATIC</p>}
           </StatsCard>
           <StatsCard>
             <p>Royalties</p>
-            <p className="text-5xl font-semibold">{`${parseInt(royaltiesPercentage) / 100}%`}</p>
+            <p className="text-5xl font-semibold">{`${
+              parseInt(saleData.royaltiesPercentage) / 100
+            }%`}</p>
             {symbol && <p className="text-sm font-semibold text-black">of each secondary sale</p>}
           </StatsCard>
           <StatsCard>
             <p>Sale price</p>
-            <p className="text-5xl font-semibold">{fromWei(salePrice)}</p>
+            <p className="text-5xl font-semibold">{fromWei(saleData.salePrice)}</p>
             {symbol && <p className="text-sm font-semibold text-black">MATIC</p>}
           </StatsCard>
           <MetadataCard />

@@ -3,7 +3,8 @@
     "name": "whitelabel.",
     "product": "factory",
     "tagline": "Release your music as an NFT.",
-    "user_releases": "My releases"
+    "user_releases": "My releases",
+    "navigate_to_market": "Music NFT Marketplace"
   },
   "wallet": {
     "connect_button": "Connect wallet",
@@ -12,11 +13,15 @@
   },
   "royalties": {
     "title": "Royalties",
-    "description": "Here you can set the royalty percentage you receive as an artist on every secondary sale"
+    "description": "Here you can set a royalty percentage for every secondary sale."
   },
   "stakeholders": {
-    "title": "Stakeholders",
-    "description": "Add stakeholders to your release. You can allocate 100 shares between multiple stakeholders. Each share equates to 1% of every primary sale of your release. "
+    "title": "Splits",
+    "description": "You can split any earnings between multiple wallets. You can allocate a maximum of 100 shares. Each share equates to 1% of all earnings for this release.",
+    "add": "Add Split",
+    "remove": "Remove Split",
+    "toggle": "Add splits",
+    "helpText": "Add an ethereum address."
   },
   "user": {
     "no_releases": "No releases found",
@@ -25,5 +30,9 @@
   "banner": {
     "text": "This is an open source project. ",
     "link": "read the docs"
+  },
+  "attributes": {
+    "title": "Attributes",
+    "description": "Add attributes to your release. This will help users find your release in the market. These values can't be updated so check your spelling!"
   }
 }

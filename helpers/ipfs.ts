@@ -29,7 +29,14 @@ export function buildMetadata(
     audio: new File([audio], audio.name, {
       type: audio.type
     }),
-    ...(attributes && { attributes }),
+    release_type: "audio",
+    ...(attributes &&
+      attributes.length && {
+        attributes: attributes.map((attribute) => ({
+          trait_type: attribute.trait_type,
+          value: attribute.value.trim().split(" ").join("-").toLowerCase()
+        }))
+      }),
     ...(licence && {
       licence: new File([licence], licence.name, {
         type: licence.type

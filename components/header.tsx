@@ -38,7 +38,7 @@ export default function Header() {
           </a>
           <p className="text-center font-bold text-pink-500 md:text-left">{t("header.tagline")}</p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center space-x-3">
           {address ? (
             <div className="flex flex-col items-center space-y-5 py-2 md:flex-row md:space-x-3 md:space-y-0 md:py-0">
               <ExplorerLink address={address} />
@@ -48,6 +48,12 @@ export default function Header() {
           ) : (
             <Button onClick={connect}>{t("wallet.connect_button")}</Button>
           )}
+          <a
+            className="rounded-md bg-white px-5 py-2 font-semibold text-black ring-2 ring-pink-500"
+            href="https://whitelabel-market.netlify.app"
+          >
+            {t("header.navigate_to_market")}
+          </a>
         </div>
       </div>
     </header>
