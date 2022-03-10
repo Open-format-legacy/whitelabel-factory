@@ -3,7 +3,8 @@
     "name": "whitelabel.",
     "product": "factory",
     "tagline": "Release your music as an NFT.",
-    "user_releases": "My releases"
+    "user_releases": "My releases",
+    "navigate_to_market": "Music NFT Marketplace"
   },
   "wallet": {
     "connect_button": "Connect wallet",
