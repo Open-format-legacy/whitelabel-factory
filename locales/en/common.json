@@ -28,7 +28,7 @@
     "preparing_release": "Preparing your release..."
   },
   "banner": {
-    "text": "This is an open source project. ",
+    "text": "⚠️ This project is in beta. ",
     "link": "read the docs"
   },
   "attributes": {
