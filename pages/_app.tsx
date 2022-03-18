@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Banner, Header } from "../components";
+import { Banner, Footer, Header } from "../components";
 import { addNetwork, NETWORK_ID, readyToTransact } from "../helpers";
 import { initOnboard } from "../services";
 import { useWalletStore } from "../stores";
@@ -60,6 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <div className="h-full min-h-screen bg-zinc-900 p-2 md:p-4">
         <Header />
         <Component {...pageProps} />
+        <Footer />
         <Toaster />
       </div>
     </QueryClientProvider>
