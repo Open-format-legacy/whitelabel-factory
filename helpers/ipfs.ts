@@ -22,6 +22,7 @@ export function buildMetadata(
   const data = {
     artist,
     name,
+    factory_id: "19d2209e-6701-46ec-ae05-33b4a3e741f1",
     description,
     image: new File([image], image.name, {
       type: image.type
